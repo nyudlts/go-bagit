@@ -3,6 +3,7 @@ package go_bagit
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -39,9 +40,15 @@ func ValidateBag(bagLocation string) error {
 		return err
 	}
 
+	tagmanifest := filepath.Join(bagLocation, "tagmanifest-sha256.txt")
+	if err := ValidateManifest(tagmanifest); err != nil {
+		return err
+	}
+
 	manifest := filepath.Join(bagLocation, "manifest-sha256.txt")
 	if err := ValidateManifest(manifest); err != nil {
 		return err
 	}
+	log.Printf("- INFO - %s is valid", bagLocation)
 	return nil
 }
