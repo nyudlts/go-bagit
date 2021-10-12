@@ -1,7 +1,15 @@
 package cmd
 
-import "fmt"
+import (
+	"github.com/spf13/cobra"
+)
 
 func Execute() {
-	fmt.Println("hi")
+	if err := rootCmd.Execute(); err != nil {
+		panic(err)
+	}
+}
+
+var rootCmd = &cobra.Command{
+	Use: "go-bagit",
 }
