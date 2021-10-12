@@ -14,7 +14,7 @@ func ValidateSHA256(f *os.File, checksum string) error {
 	}
 
 	if calculatedChecksum != checksum {
-		return fmt.Errorf("Checksum did not math")
+		return fmt.Errorf("sha256 validation failed: expected=\"%s\" found=\"%s\"", checksum, calculatedChecksum)
 	}
 	return nil
 }

@@ -29,26 +29,38 @@ func GetOxum(bagLocation string) (string, error) {
 }
 
 func ValidateBag(bagLocation string) error {
-
+	errors := []error{}
 	storedOxum, err := GetOxum(bagLocation)
 	if err != nil {
-		return err
+		errors = append(errors, err)
 	}
 
 	err = ValidateOxum(bagLocation, storedOxum)
 	if err != nil {
-		return err
+		errors = append(errors, err)
 	}
 
 	tagmanifest := filepath.Join(bagLocation, "tagmanifest-sha256.txt")
-	if err := ValidateManifest(tagmanifest); err != nil {
-		return err
+	e := ValidateManifest(tagmanifest); if len(e) > 0 {
+		errors = append(errors, e...)
 	}
 
 	manifest := filepath.Join(bagLocation, "manifest-sha256.txt")
-	if err := ValidateManifest(manifest); err != nil {
-		return err
+	e = ValidateManifest(manifest); if len(e) > 0 {
+		errors = append(errors, e...)
 	}
-	log.Printf("- INFO - %s is valid", bagLocation)
+
+	if len(errors) == 0 {
+		log.Printf("- INFO - %s is valid", bagLocation)
+	} else {
+		errorMsgs := fmt.Sprintf("- ERROR - %s is invalid: Bag validation failed: ", bagLocation)
+		for i, e := range errors {
+			errorMsgs = errorMsgs + e.Error()
+			if i < len(errors) - 1 {
+				errorMsgs = errorMsgs + "; "
+			}
+		}
+		log.Println(errorMsgs)
+	}
 	return nil
 }

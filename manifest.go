@@ -28,31 +28,34 @@ func ReadManifest(path string) (map[string]string, error) {
 
 }
 
-func ValidateManifest(manifestLocation string) error {
-
+func ValidateManifest(manifestLocation string) []error {
+	errors := []error{}
 	lastInd := strings.LastIndex(manifestLocation, "/")
 	path := manifestLocation[:lastInd]
 
 	manifestMap, err := ReadManifest(manifestLocation)
 	if err != nil {
-		return err
+		return append(errors, err)
 	}
 
 	for k,v  := range manifestMap {
 		entryPath := filepath.Join(path, k)
+		log.Println("- INFO - Verifying checksum for file", entryPath)
 		if err := entryExists(entryPath); err != nil {
-			return err
+			return append(errors, err)
 		}
 		f, err := os.Open(entryPath)
 		if err != nil {
-			return err
+			return append(errors, err)
 		}
-		log.Println("- INFO - Verifying checksum for file", entryPath)
+
 		if err := ValidateSHA256(f, v); err != nil {
-			return 	err
+
+			log.Println(fmt.Errorf("- WARNING - %s", err.Error()))
+			errors = append(errors, err)
 		}
 	}
-	return nil
+	return errors
 }
 
 func entryExists(path string) error {

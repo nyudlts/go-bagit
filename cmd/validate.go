@@ -3,6 +3,7 @@ package cmd
 import (
 	go_bagit "github.com/nyudlts/go-bagit"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 var bagLocation string
@@ -15,6 +16,8 @@ func init() {
 var validateCmd = &cobra.Command{
 	Use: "validate",
 	Run: func(cmd *cobra.Command, args []string) {
-		go_bagit.ValidateBag(bagLocation)
+		if err := go_bagit.ValidateBag(bagLocation); err != nil {
+			log.Fatal(err.Error())
+		}
 	},
 }
