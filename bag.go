@@ -40,13 +40,15 @@ func ValidateBag(bagLocation string) error {
 		errors = append(errors, err)
 	}
 
-	tagmanifest := filepath.Join(bagLocation, "tagmanifest-sha256.txt")
-	e := ValidateManifest(tagmanifest); if len(e) > 0 {
+	manifest := filepath.Join(bagLocation, "manifest-sha256.txt")
+	e := ValidateManifest(manifest)
+	if len(e) > 0 {
 		errors = append(errors, e...)
 	}
 
-	manifest := filepath.Join(bagLocation, "manifest-sha256.txt")
-	e = ValidateManifest(manifest); if len(e) > 0 {
+	tagmanifest := filepath.Join(bagLocation, "tagmanifest-sha256.txt")
+	e = ValidateManifest(tagmanifest)
+	if len(e) > 0 {
 		errors = append(errors, e...)
 	}
 
@@ -56,7 +58,7 @@ func ValidateBag(bagLocation string) error {
 		errorMsgs := fmt.Sprintf("- ERROR - %s is invalid: Bag validation failed: ", bagLocation)
 		for i, e := range errors {
 			errorMsgs = errorMsgs + e.Error()
-			if i < len(errors) - 1 {
+			if i < len(errors)-1 {
 				errorMsgs = errorMsgs + "; "
 			}
 		}
