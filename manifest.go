@@ -41,7 +41,8 @@ func ValidateManifest(manifestLocation string) []error {
 
 	for k, v := range manifestMap {
 		entryPath := filepath.Join(path, k)
-		log.Println("- INFO - Verifying checksum for file", entryPath)
+		absolutePath, _ := filepath.Abs(entryPath)
+		log.Println("- INFO - Verifying checksum for file", absolutePath)
 		if err := entryExists(entryPath); err != nil {
 			return append(errors, err)
 		}
