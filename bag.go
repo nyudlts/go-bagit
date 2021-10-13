@@ -25,13 +25,14 @@ func GetOxum(bagLocation string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("bag-info.txt did not contain a payload-oxum")
+	return "", fmt.Errorf("%s did not contain a payload-oxum", f.Name())
 }
 
 func ValidateBag(bagLocation string) error {
 	errors := []error{}
 	storedOxum, err := GetOxum(bagLocation)
 	if err != nil {
+		log.Printf("- ERROR - %s", err.Error())
 		return err
 	}
 
