@@ -8,7 +8,8 @@ import (
 var bagLocation string
 
 func init() {
-	validateCmd.PersistentFlags().StringVar(&bagLocation, "bag", "", "bag to be validated")
+	validateCmd.Flags().StringVar(&bagLocation, "bag", "", "bag to be validated")
+	validateCmd.MarkFlagRequired("bag")
 	rootCmd.AddCommand(validateCmd)
 }
 

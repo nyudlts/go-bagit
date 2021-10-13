@@ -1,32 +1,10 @@
 package go_bagit
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"path/filepath"
-	"strings"
 )
-
-func GetOxum(bagLocation string) (string, error) {
-	f, err := os.Open(filepath.Join(bagLocation, "bag-info.txt"))
-	if err != nil {
-		return "", err
-	}
-
-	scanner := bufio.NewScanner(f)
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		splitLine := strings.Split(line, ":")
-		if splitLine[0] == "Payload-Oxum" {
-			return strings.TrimSpace(splitLine[1]), nil
-		}
-	}
-
-	return "", fmt.Errorf("%s did not contain a payload-oxum", f.Name())
-}
 
 func ValidateBag(bagLocation string) error {
 	errors := []error{}

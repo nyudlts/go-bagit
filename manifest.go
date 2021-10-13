@@ -33,7 +33,8 @@ func ValidateManifest(manifestLocation string) []error {
 	errors := []error{}
 	lastInd := strings.LastIndex(manifestLocation, "/")
 	path := manifestLocation[:lastInd]
-
+	file := manifestLocation[lastInd:]
+	algorithm := getAlgorithm(file)
 	manifestMap, err := ReadManifest(manifestLocation)
 	if err != nil {
 		return append(errors, err)
@@ -51,7 +52,7 @@ func ValidateManifest(manifestLocation string) []error {
 			return append(errors, err)
 		}
 
-		if err := ValidateSHA256(f, v); err != nil {
+		if err := ValidateChecksum(f, algorithm, v); err != nil {
 			fLocation := f.Name()[len(path)+1 : len(f.Name())]
 			err = fmt.Errorf("%s %s", fLocation, err.Error())
 			log.Println(fmt.Errorf("- WARNING - %s", err))
@@ -69,4 +70,10 @@ func entryExists(path string) error {
 	} else {
 		return err
 	}
+}
+
+func getAlgorithm(filename string) string {
+	split := strings.Split(filename, "-")
+	removeExtension := strings.Split(split[1], ".")
+	return removeExtension[0]
 }

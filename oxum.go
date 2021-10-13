@@ -1,6 +1,7 @@
 package go_bagit
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -33,6 +34,25 @@ func ParseOxumString(oxum string) (Oxum, error) {
 	return o, nil
 }
 
+func GetOxum(bagLocation string) (string, error) {
+	f, err := os.Open(filepath.Join(bagLocation, "bag-info.txt"))
+	if err != nil {
+		return "", err
+	}
+
+	scanner := bufio.NewScanner(f)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		splitLine := strings.Split(line, ":")
+		if splitLine[0] == "Payload-Oxum" {
+			return strings.TrimSpace(splitLine[1]), nil
+		}
+	}
+
+	return "", fmt.Errorf("%s did not contain a payload-oxum", f.Name())
+}
+
 func ValidateOxum(bagLocation string, oxum string) error {
 	storedOxum, err := ParseOxumString(oxum)
 	if err != nil {
@@ -44,7 +64,7 @@ func ValidateOxum(bagLocation string, oxum string) error {
 		return err
 	}
 
-	if (calculatedOxum.Size != storedOxum.Size || calculatedOxum.Count != storedOxum.Count) {
+	if calculatedOxum.Size != storedOxum.Size || calculatedOxum.Count != storedOxum.Count {
 		return fmt.Errorf("%s is invalid: Payload-Oxum validation failed. Expected %d files and %v bytes but found %d files and %v bytes",
 			bagLocation, storedOxum.Count, storedOxum.Size, calculatedOxum.Count, calculatedOxum.Size)
 	}
