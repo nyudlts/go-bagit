@@ -8,7 +8,7 @@ import (
 
 func TestChecksums(t *testing.T) {
 	t.Run("Test validate sha256", func(t *testing.T) {
-		testFile, err :=  os.Open(filepath.Join("test", "bag", "data", "test-file.txt"))
+		testFile, err :=  os.Open(filepath.Join("test", "valid", "data", "test-file.txt"))
 		if err != nil {
 			t.Error(err)
 		}

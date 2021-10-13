@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var testBag = filepath.Join("test", "bag")
+var testBag = filepath.Join("test", "valid")
 
 func TestOxum(t *testing.T) {
 	t.Run("Test Oxum Calculation", func(t *testing.T) {

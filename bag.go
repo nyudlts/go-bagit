@@ -32,12 +32,13 @@ func ValidateBag(bagLocation string) error {
 	errors := []error{}
 	storedOxum, err := GetOxum(bagLocation)
 	if err != nil {
-		errors = append(errors, err)
+		return err
 	}
 
 	err = ValidateOxum(bagLocation, storedOxum)
 	if err != nil {
-		errors = append(errors, err)
+		log.Printf("- ERROR - %s", err.Error())
+		return err
 	}
 
 	manifest := filepath.Join(bagLocation, "manifest-sha256.txt")

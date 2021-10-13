@@ -44,12 +44,9 @@ func ValidateOxum(bagLocation string, oxum string) error {
 		return err
 	}
 
-	if calculatedOxum.Size != storedOxum.Size {
-		return fmt.Errorf("Size mismatch, expected %v got %v", storedOxum.Size, calculatedOxum.Size)
-	}
-
-	if calculatedOxum.Count != storedOxum.Count {
-		return fmt.Errorf("Count mismatch, expected %d got %d", storedOxum.Count, calculatedOxum.Count)
+	if (calculatedOxum.Size != storedOxum.Size || calculatedOxum.Count != storedOxum.Count) {
+		return fmt.Errorf("%s is invalid: Payload-Oxum validation failed. Expected %d files and %v bytes but found %d files and %v bytes",
+			bagLocation, storedOxum.Count, storedOxum.Size, calculatedOxum.Count, calculatedOxum.Size)
 	}
 
 	return nil
