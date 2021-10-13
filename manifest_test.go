@@ -22,7 +22,14 @@ func TestManifests(t *testing.T) {
 
 	t.Run("Test Validate a manifest file", func(t *testing.T) {
 		manifestLoc := filepath.Join("test", "valid", "manifest-sha256.txt")
-		if err := ValidateManifest(manifestLoc); len(err) > 0 {
+		if err := ValidateManifest(manifestLoc, false); len(err) > 0 {
+			t.Error(err[0])
+		}
+	})
+
+	t.Run("Test Completeness Only Validation of a manifest file", func(t *testing.T) {
+		manifestLoc := filepath.Join("test", "valid", "manifest-sha256.txt")
+		if err := ValidateManifest(manifestLoc, true); len(err) > 0 {
 			t.Error(err[0])
 		}
 	})

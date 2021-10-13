@@ -28,7 +28,7 @@ func ReadManifest(path string) (map[string]string, error) {
 
 }
 
-func ValidateManifest(manifestLocation string) []error {
+func ValidateManifest(manifestLocation string, complete bool) []error {
 
 	errors := []error{}
 	lastInd := strings.LastIndex(manifestLocation, "/")
@@ -43,7 +43,7 @@ func ValidateManifest(manifestLocation string) []error {
 	for k, v := range manifestMap {
 		entryPath := filepath.Join(path, k)
 		absolutePath, _ := filepath.Abs(entryPath)
-		log.Println("- INFO - Verifying checksum for file", absolutePath)
+
 		if err := entryExists(entryPath); err != nil {
 			return append(errors, err)
 		}
@@ -52,11 +52,14 @@ func ValidateManifest(manifestLocation string) []error {
 			return append(errors, err)
 		}
 
-		if err := ValidateChecksum(f, algorithm, v); err != nil {
-			fLocation := f.Name()[len(path)+1 : len(f.Name())]
-			err = fmt.Errorf("%s %s", fLocation, err.Error())
-			log.Println(fmt.Errorf("- WARNING - %s", err))
-			errors = append(errors, err)
+		if complete == false {
+			log.Println("- INFO - Verifying checksum for file", absolutePath)
+			if err := ValidateChecksum(f, algorithm, v); err != nil {
+				fLocation := f.Name()[len(path)+1 : len(f.Name())]
+				err = fmt.Errorf("%s %s", fLocation, err.Error())
+				log.Println(fmt.Errorf("- WARNING - %s", err))
+				errors = append(errors, err)
+			}
 		}
 	}
 	return errors
