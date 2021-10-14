@@ -65,6 +65,14 @@ func ValidateManifest(manifestLocation string, complete bool) []error {
 	return errors
 }
 
+func AppendToManifest(fi *os.File, hash string, fileEntry string) error {
+	if _, err := fi.WriteString(fmt.Sprintf("%s %s\n", hash, fileEntry)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func entryExists(path string) error {
 	if _, err := os.Stat(path); err == nil {
 		return nil
