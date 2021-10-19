@@ -3,6 +3,7 @@ package go_bagit
 import (
 	"bufio"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -87,4 +88,28 @@ func getAlgorithm(filename string) string {
 	split := strings.Split(filename, "-")
 	removeExtension := strings.Split(split[1], ".")
 	return removeExtension[0]
+}
+
+func CreateManifest(dataDir string, algorithm string, numProcesses int) error {
+	log.Printf("- INFO - Using %d processes to generate manifests: %s", numProcesses, algorithm)
+	manifestLines := []string{}
+	err := filepath.WalkDir(dataDir, func(path string, d fs.DirEntry, err error) error {
+		if d.IsDir() != true {
+			log.Printf("- INFO - Generating manifest lines for file %s", path)
+			f, err := os.Open(path)
+			if err != nil {
+				return err
+			}
+			checksum, err := GenerateChecksum(f, algorithm)
+			if err != nil {
+				return err
+			}
+			manifestLines = append(manifestLines, fmt.Sprintf("%s %s", checksum, path))
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
