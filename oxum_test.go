@@ -15,7 +15,7 @@ func TestOxum(t *testing.T) {
 			t.Error(err)
 		}
 		want := "20.1"
-		if(oxum.String() != want) {
+		if oxum.String() != want {
 			t.Error("oxum did not calculate")
 		}
 	})

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io/fs"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -90,11 +91,12 @@ func getAlgorithm(filename string) string {
 	return removeExtension[0]
 }
 
-func CreateManifest(dataDir string, algorithm string, numProcesses int) error {
+func CreateManifest(manifestName string, bagLoc string, algorithm string, numProcesses int) error {
+	dataDir := filepath.Join(bagLoc, "data")
 	log.Printf("- INFO - Using %d processes to generate manifests: %s", numProcesses, algorithm)
 	manifestLines := []string{}
-	err := filepath.WalkDir(dataDir, func(path string, d fs.DirEntry, err error) error {
-		if d.IsDir() != true {
+	err := filepath.WalkDir(dataDir, func(path string, info fs.DirEntry, err error) error {
+		if info.IsDir() != true {
 			log.Printf("- INFO - Generating manifest lines for file %s", path)
 			f, err := os.Open(path)
 			if err != nil {
@@ -104,12 +106,66 @@ func CreateManifest(dataDir string, algorithm string, numProcesses int) error {
 			if err != nil {
 				return err
 			}
-			manifestLines = append(manifestLines, fmt.Sprintf("%s %s", checksum, path))
+			entryName := path[len(bagLoc)+1:]
+			manifestLines = append(manifestLines, fmt.Sprintf("%s  %s", checksum, entryName))
 		}
 		return nil
 	})
 	if err != nil {
 		return err
+	}
+
+	manifestFileName := fmt.Sprintf("%s-%s.txt", manifestName, algorithm)
+	if err := createManifestFile(bagLoc, manifestFileName, manifestLines); err != nil {
+		return err
+	}
+	return nil
+}
+
+func CreateTagManifest(inputDir string, algorithm string, numProcesses int) error {
+
+	files, err := ioutil.ReadDir(inputDir)
+	if err != nil {
+		return err
+	}
+
+	manifestLines := []string{}
+
+	for _, file := range files {
+		if file.IsDir() != true {
+			log.Printf("- INFO - Generating manifest lines for file %s", file.Name())
+			fi, err := os.Open(filepath.Join(inputDir, file.Name()))
+			if err != nil {
+				return err
+			}
+			checksum, err := GenerateChecksum(fi, algorithm)
+			if err != nil {
+				return err
+			}
+
+			manifestLines = append(manifestLines, fmt.Sprintf("%s  %s", checksum, file.Name()))
+		}
+	}
+
+	manifestName := fmt.Sprintf("tagmanifest-%s.txt", algorithm)
+
+	if err := createManifestFile(inputDir, manifestName, manifestLines); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func createManifestFile(bagLocation string, manifestFileName string, manifestLines []string) error {
+	outFile, err := os.Create(filepath.Join(bagLocation, manifestFileName))
+	if err != nil {
+		return err
+	}
+	defer outFile.Close()
+	writer := bufio.NewWriter(outFile)
+	for _, manifestLine := range manifestLines {
+		writer.WriteString(manifestLine + "\n")
+		writer.Flush()
 	}
 	return nil
 }

@@ -95,7 +95,49 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	}
 
 	//Generate the manifest
-	if err := CreateManifest(dataDirName, algorithm, numProcesses); err != nil {
+	if err := CreateManifest("manifest", inputDir, algorithm, numProcesses); err != nil {
+		return err
+	}
+
+	//Generate bagit.txt
+	log.Println("- INFO - Creating bagit.txt")
+	if err := createBagIt(inputDir); err != nil {
+		return err
+	}
+
+	//Generate bag-info.txt
+	log.Println("- INFO - Creating bag-info.txt")
+	if err := createBagInfo(inputDir); err != nil {
+		return err
+	}
+
+	//Generate TagManifest
+	if err := CreateTagManifest(inputDir, algorithm, numProcesses); err != nil {
+		return err
+	}
+
+	//you are done
+	return nil
+}
+
+func createBagInfo(bagLoc string) error {
+
+	oxum, err := CalculateOxum(bagLoc)
+	if err != nil {
+		return err
+	}
+
+	bagInfo.Tags["Payload-Oxum"] = oxum.String()
+	bagInfo.Path = bagLoc
+	if err := bagInfo.Serialize(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func createBagIt(bagLoc string) error {
+	bagit.Path = bagLoc
+	if err := bagit.Serialize(); err != nil {
 		return err
 	}
 	return nil
