@@ -6,7 +6,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 )
+
+var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
 
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	errors := []error{}
@@ -27,16 +30,20 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 		return nil
 	}
 
-	manifest := filepath.Join(bagLocation, "manifest-sha256.txt")
-	e := ValidateManifest(manifest, complete)
-	if len(e) > 0 {
-		errors = append(errors, e...)
+	//validate ant manifest files
+	bagFiles, err := ioutil.ReadDir(bagLocation)
+	if err != nil {
+		return err
 	}
 
-	tagmanifest := filepath.Join(bagLocation, "tagmanifest-sha256.txt")
-	e = ValidateManifest(tagmanifest, complete)
-	if len(e) > 0 {
-		errors = append(errors, e...)
+	for _, bagFile := range bagFiles {
+		if manifestPtn.MatchString(bagFile.Name()) == true {
+			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
+			e := ValidateManifest(manifestLoc, complete)
+			if len(e) > 0 {
+				errors = append(errors, e...)
+			}
+		}
 	}
 
 	if len(errors) == 0 {
