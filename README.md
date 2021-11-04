@@ -34,3 +34,9 @@ Early Go implementation of the bagit specification
     -h, --help           help for create
     --input-dir string   the directory to be bagged
     --processes int      Use multiple processes to calculate checksums faster (default 1)
+
+### Supported Algorithms
+* md5
+* sha1
+* sha256
+* sha512
