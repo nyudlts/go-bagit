@@ -23,7 +23,7 @@ Early Go implementation of the bagit specification
     --fast              test whether the bag directory has the expected payload specified in the checksum manifests without performing checksum validation to detect corruption
     --completeness-only only test whether the bag directory has the number of files and total size specified in Payload-Oxum without performing checksum validation to detect corruption
 
-## Create Commnd
+## Create Command
 
 ### Usage
 `go-bagit create [flags]`
