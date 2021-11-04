@@ -1,7 +1,15 @@
 # go-bagit
 Early Go implementation of the bagit specification
 
-## Build
+## Binary Install
+latest binary:
+* osx https://github.com/nyudlts/go-bagit/releases/download/v0.1.0-alpha/go-bagit-v0.1.0-alpha-osx.tgz
+* linux [TBA] 
+
+`tar xvzf go-bagit-[VERSION]-[OS].tgz`</br> 
+`sudo mv go-bagit /path/to/bins`
+
+## Building From Source
 `go build -o go-bagit main/main.go`
 
 ## Usage:
