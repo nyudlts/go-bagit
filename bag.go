@@ -108,13 +108,24 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 
 	//Generate bagit.txt
 	log.Println("- INFO - Creating bagit.txt")
-	if err := createBagIt(inputDir); err != nil {
+	bagit := CreateBagit()
+	bagit.Path = inputDir
+	if err := bagit.Serialize(); err != nil {
 		return err
 	}
 
 	//Generate bag-info.txt
 	log.Println("- INFO - Creating bag-info.txt")
-	if err := createBagInfo(inputDir); err != nil {
+
+	//get the oxum
+	oxum, err := CalculateOxum(inputDir)
+	if err != nil {
+		return err
+	}
+	bagInfo := CreateBagInfo()
+	bagInfo.Tags[StandardTags.PayloadOxum] = oxum.String()
+	bagInfo.Path = inputDir
+	if err := bagInfo.Serialize(); err != nil {
 		return err
 	}
 
@@ -124,29 +135,6 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	}
 
 	//you are done
-	return nil
-}
-
-func createBagInfo(bagLoc string) error {
-
-	oxum, err := CalculateOxum(bagLoc)
-	if err != nil {
-		return err
-	}
-
-	bagInfo.Tags["Payload-Oxum"] = oxum.String()
-	bagInfo.Path = bagLoc
-	if err := bagInfo.Serialize(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func createBagIt(bagLoc string) error {
-	bagit.Path = bagLoc
-	if err := bagit.Serialize(); err != nil {
-		return err
-	}
 	return nil
 }
 
