@@ -4,4 +4,4 @@ import "time"
 
 var currentTime = time.Now()
 
-var libraryVersion = "0.1.0-alpha"
+var libraryVersion = "0.1.1-alpha"

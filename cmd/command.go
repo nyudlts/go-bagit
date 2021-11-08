@@ -16,7 +16,7 @@ var rootCmd = &cobra.Command{
 
 //flag variables
 var (
-	addTagFile        bool
+	addBagFile        bool
 	bagLocation       string
 	checksumAlgorithm string
 	complete          bool

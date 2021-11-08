@@ -12,6 +12,12 @@ latest binary:
 ## Building From Source
 `go build -o go-bagit main/main.go`
 
+## Supported Algorithms
+* md5
+* sha1
+* sha256
+* sha512
+
 ## Usage:
 `go-bagit [command] [flags]`
 
@@ -19,6 +25,7 @@ latest binary:
     help        Help about any command
     validate    validate a bag
     create      create a bag
+    modify      modify a bag
 
 ## Validate Command
 
@@ -43,8 +50,14 @@ latest binary:
     --input-dir string   the directory to be bagged
     --processes int      Use multiple processes to calculate checksums faster (default 1)
 
-### Supported Algorithms
-* md5
-* sha1
-* sha256
-* sha512
+## Modify Command
+
+### Usage
+`go-bagit modify [flags]`
+
+### Flags
+    --add-to-bag    add a file to tag manifest
+    --bag string    bag to be validated
+    --file string   location of a file
+    -h, --help      help for modify
+    

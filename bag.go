@@ -140,7 +140,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	return nil
 }
 
-func AddFileToTagManifest(bagLocation string, file string) error {
+func AddFileToBag(bagLocation string, file string) error {
 	//check if bag location is valid
 	if err := directoryExists(bagLocation); err != nil {
 		return err
