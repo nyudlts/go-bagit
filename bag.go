@@ -2,6 +2,7 @@ package go_bagit
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -138,19 +139,82 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	return nil
 }
 
+func AddFileToTagManifest(bagLocation string, file string) error {
+	//check if bag location is valid
+	if err := directoryExists(bagLocation); err != nil {
+		return err
+	}
+
+	//check if source file is valid
+	if err := fileExists(file); err != nil {
+		return err
+	}
+
+	//check if there is already a source file with the same name in the bag
+	sourceFileInfo, err := os.Stat(file)
+	if err != nil {
+		return err
+	}
+	targetFilePath := filepath.Join(bagLocation, sourceFileInfo.Name())
+	log.Println(targetFilePath)
+	err = fileExists(targetFilePath)
+	if err == nil {
+		fmt.Errorf("- ERROR - cannot create target file %s already exists", targetFilePath)
+	}
+
+	//create the target file
+	targetFile, err := os.Create(targetFilePath)
+	if err != nil {
+		return err
+	}
+	defer targetFile.Close()
+
+	//read the source file
+	sourceFile, err := os.Open(file)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	//write the contents of the source file to the target file
+	log.Printf("- INFO - copying file %s to %s", file, bagLocation)
+	if _, err := io.Copy(targetFile, sourceFile); err != nil {
+		return err
+	}
+
+	//ensure the new file exists
+	if err := fileExists(targetFilePath); err != nil {
+		return err
+	}
+
+	//add the file to the tag-manifest
+
+	return nil
+}
+
+func fileExists(file string) error {
+	if _, err := os.Stat(file); err == nil {
+		return nil
+	} else if os.IsNotExist(err) {
+		errorMsg := fmt.Errorf("file %s does not exist", file)
+		return errorMsg
+	} else {
+		log.Println("- ERROR - unknown error:", err.Error())
+		return err
+	}
+}
+
 func directoryExists(inputDir string) error {
 	if fi, err := os.Stat(inputDir); err == nil {
 		if fi.IsDir() == true {
 			return nil
 		} else {
-			errorMsg := fmt.Errorf("Failed to create bag: input directory %s is not a directory", inputDir)
-			log.Println("- Error -", errorMsg)
+			errorMsg := fmt.Errorf("- ERROR - input directory %s is not a directory", inputDir)
 			return errorMsg
 		}
 	} else if os.IsNotExist(err) {
-		errorMsg := fmt.Errorf(" - ERROR - input %s directory does not exist", inputDir)
-		log.Println(errorMsg)
-		return err
+		errorMsg := fmt.Errorf("- ERROR - input %s directory does not exist", inputDir)
+		return errorMsg
 	} else {
 		return err
 	}

@@ -5,10 +5,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var bagLocation string
-var complete bool
-var fast bool
-
 func init() {
 	validateCmd.Flags().StringVar(&bagLocation, "bag", "", "bag to be validated")
 	validateCmd.MarkFlagRequired("bag")

@@ -5,12 +5,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	inputDir string
-	checksumAlgorithm string
-	numProcesses int
-)
-
 func init() {
 	createCmd.Flags().StringVar(&inputDir, "input-dir", "", "the directory to be bagged")
 	createCmd.Flags().StringVar(&checksumAlgorithm, "algorithm", "md5", "the algorithm used for checksums")

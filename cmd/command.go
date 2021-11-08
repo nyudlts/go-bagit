@@ -13,3 +13,15 @@ func Execute() {
 var rootCmd = &cobra.Command{
 	Use: "go-bagit",
 }
+
+//flag variables
+var (
+	addTagFile        bool
+	bagLocation       string
+	checksumAlgorithm string
+	complete          bool
+	fast              bool
+	file              string
+	inputDir          string
+	numProcesses      int
+)
