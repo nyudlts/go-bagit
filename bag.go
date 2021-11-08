@@ -11,6 +11,7 @@ import (
 )
 
 var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
+var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	errors := []error{}
@@ -186,8 +187,28 @@ func AddFileToTagManifest(bagLocation string, file string) error {
 	if err := fileExists(targetFilePath); err != nil {
 		return err
 	}
+	targetFile.Close()
 
-	//add the file to the tag-manifest
+	//locate any tag manifest files
+	bagFiles, err := ioutil.ReadDir(bagLocation)
+	if err != nil {
+		return err
+	}
+
+	for _, bagFile := range bagFiles {
+		if tagmanifestPtn.MatchString(bagFile.Name()) {
+			//add the file to the tag-manifest
+			err := appendToTagManifest(targetFilePath, bagLocation, bagFile.Name()); if err != nil {
+				return err
+			}
+		}
+	}
+
+	//validate the bag
+	if err := ValidateBag(bagLocation, false, false); err != nil {
+		return err
+	}
+
 
 	return nil
 }

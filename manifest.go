@@ -30,6 +30,43 @@ func ReadManifest(path string) (map[string]string, error) {
 
 }
 
+func appendToTagManifest(targetFilePath string, bagLocation string, manifestFileName string) error {
+
+	//get target file metadata
+	targetFileInfo, err := os.Stat(targetFilePath)
+	if err != nil {
+		return err
+	}
+	log.Printf("- INFO - Adding %s to %s", targetFileInfo.Name(), manifestFileName)
+
+	//get Algorithm of manifest file
+	manifestLocation := filepath.Join(bagLocation, manifestFileName)
+	algorithm := getAlgorithm(manifestLocation)
+
+	//generate the checksum
+	log.Printf("- INFO - generating checksum for %s using %s algorithm", targetFileInfo.Name(), algorithm)
+	targetFile, err := os.Open(targetFilePath)
+	checksum, err := GenerateChecksum(targetFile, algorithm)
+	if err != nil {
+		return err
+	}
+	entry := fmt.Sprintf("%s  %s", checksum, targetFileInfo.Name())
+
+	//open the manifest file
+	manifestFile, err := os.OpenFile(manifestLocation, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
+	if err != nil {
+		return err
+	}
+	defer manifestFile.Close()
+
+	//write the entry to the manifest file
+	if _, err := manifestFile.WriteString(entry); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func ValidateManifest(manifestLocation string, complete bool) []error {
 
 	errors := []error{}
@@ -67,13 +104,7 @@ func ValidateManifest(manifestLocation string, complete bool) []error {
 	return errors
 }
 
-func AppendToManifest(fi *os.File, hash string, fileEntry string) error {
-	if _, err := fi.WriteString(fmt.Sprintf("%s %s\n", hash, fileEntry)); err != nil {
-		return err
-	}
 
-	return nil
-}
 
 func entryExists(path string) error {
 	if _, err := os.Stat(path); err == nil {
@@ -87,7 +118,7 @@ func entryExists(path string) error {
 
 func getAlgorithm(filename string) string {
 	split := strings.Split(filename, "-")
-	removeExtension := strings.Split(split[1], ".")
+	removeExtension := strings.Split(split[len(split) - 1], ".")
 	return removeExtension[0]
 }
 
