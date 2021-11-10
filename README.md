@@ -3,8 +3,8 @@ Early Go implementation of the bagit specification
 
 ## Binary Install
 latest binary:
-* osx https://github.com/nyudlts/go-bagit/releases/download/v0.1.0-alpha/go-bagit-v0.1.0-alpha-osx.tgz
-* linux [TBA] 
+* osx https://github.com/nyudlts/go-bagit/releases/download/v0.1.0-alpha/go-bagit-v0.1.1-alpha-osx.tgz
+* linux https://github.com/nyudlts/go-bagit/releases/download/v0.1.0-alpha/go-bagit-v0.1.1-alpha-linux.tgz 
 
 `tar xvzf go-bagit-[VERSION]-[OS].tgz`</br> 
 `sudo mv go-bagit /path/to/bins`
