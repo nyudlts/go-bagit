@@ -159,7 +159,7 @@ func AddFileToBag(bagLocation string, file string) error {
 	log.Println(targetFilePath)
 	err = fileExists(targetFilePath)
 	if err == nil {
-		fmt.Errorf("- ERROR - cannot create target file %s already exists", targetFilePath)
+		return fmt.Errorf("- ERROR - cannot create target file %s already exists", targetFilePath)
 	}
 
 	//create the target file
@@ -197,7 +197,8 @@ func AddFileToBag(bagLocation string, file string) error {
 	for _, bagFile := range bagFiles {
 		if tagmanifestPtn.MatchString(bagFile.Name()) {
 			//add the file to the tag-manifest
-			err := appendToTagManifest(targetFilePath, bagLocation, bagFile.Name()); if err != nil {
+			err := appendToTagManifest(targetFilePath, bagLocation, bagFile.Name())
+			if err != nil {
 				return err
 			}
 		}
@@ -207,7 +208,6 @@ func AddFileToBag(bagLocation string, file string) error {
 	if err := ValidateBag(bagLocation, false, false); err != nil {
 		return err
 	}
-
 
 	return nil
 }
