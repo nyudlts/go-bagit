@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -145,7 +144,7 @@ func CreateManifest(manifestName string, bagLoc string, algorithm string, numPro
 
 func CreateTagManifest(inputDir string, algorithm string, numProcesses int) error {
 
-	files, err := ioutil.ReadDir(inputDir)
+	files, err := os.ReadDir(inputDir)
 	if err != nil {
 		return err
 	}

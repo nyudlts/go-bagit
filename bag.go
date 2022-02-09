@@ -3,7 +3,6 @@ package go_bagit
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -32,7 +31,7 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	}
 
 	//validate ant manifest files
-	bagFiles, err := ioutil.ReadDir(bagLocation)
+	bagFiles, err := os.ReadDir(bagLocation)
 	if err != nil {
 		return err
 	}
@@ -71,7 +70,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	log.Printf("- INFO - Creating Bag for directory %s", inputDir)
 
 	//create a slice of files
-	filesToBag, err := ioutil.ReadDir(inputDir)
+	filesToBag, err := os.ReadDir(inputDir)
 	if err != nil {
 		return err
 	}
@@ -189,7 +188,7 @@ func AddFileToBag(bagLocation string, file string) error {
 	targetFile.Close()
 
 	//locate any tag manifest files
-	bagFiles, err := ioutil.ReadDir(bagLocation)
+	bagFiles, err := os.ReadDir(bagLocation)
 	if err != nil {
 		return err
 	}
