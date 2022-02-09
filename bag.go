@@ -1,8 +1,10 @@
 package go_bagit
 
 import (
+	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,7 +14,7 @@ var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
-	errors := []error{}
+	errs := []error{}
 	storedOxum, err := GetOxum(bagLocation)
 	if err != nil {
 		log.Printf("- ERROR - %s", err.Error())
@@ -36,29 +38,59 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 		return err
 	}
 
+	dataFiles := map[string]bool{}
 	for _, bagFile := range bagFiles {
 		if manifestPtn.MatchString(bagFile.Name()) == true {
 			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
-			e := ValidateManifest(manifestLoc, complete)
+			entries, e := ValidateManifest(manifestLoc, complete)
 			if len(e) > 0 {
-				errors = append(errors, e...)
+				errs = append(errs, e...)
+			}
+			for path := range entries {
+				dataFiles[path] = true
+			}
+		}
+		if tagmanifestPtn.MatchString(bagFile.Name()) {
+			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
+			_, e := ValidateManifest(manifestLoc, complete)
+			if len(e) > 0 {
+				errs = append(errs, e...)
 			}
 		}
 	}
 
-	if len(errors) == 0 {
-		log.Printf("- INFO - %s is valid", bagLocation)
-	} else {
-		errorMsgs := fmt.Sprintf("- ERROR - %s is invalid: Bag validation failed: ", bagLocation)
-		for i, e := range errors {
-			errorMsgs = errorMsgs + e.Error()
-			if i < len(errors)-1 {
-				errorMsgs = errorMsgs + "; "
-			}
+	dataDirName := filepath.Join(bagLocation, "data")
+	if err := filepath.WalkDir(dataDirName, func(path string, d fs.DirEntry, err error) error {
+		if dataDirName == path {
+			return nil
 		}
-		log.Println(errorMsgs)
+		rel, err := filepath.Rel(bagLocation, path)
+		if err != nil {
+			return err
+		}
+		if _, ok := dataFiles[rel]; !ok {
+			return fmt.Errorf("%s exists on filesystem but is not in the manifest", rel)
+		}
+		return nil
+	}); err != nil {
+		errs = append(errs, err)
 	}
-	return nil
+
+	if len(errs) == 0 {
+		log.Printf("- INFO - %s is valid", bagLocation)
+		return nil
+	}
+
+	errorMsgs := fmt.Sprintf("- ERROR - %s is invalid: Bag validation failed: ", bagLocation)
+	for i, e := range errs {
+		errorMsgs = errorMsgs + e.Error()
+		if i < len(errs)-1 {
+			errorMsgs = errorMsgs + "; "
+		}
+	}
+	log.Println(errorMsgs)
+
+	return errors.New(errorMsgs)
 }
 
 func CreateBag(inputDir string, algorithm string, numProcesses int) error {
