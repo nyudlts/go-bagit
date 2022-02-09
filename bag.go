@@ -1,6 +1,7 @@
 package go_bagit
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"io/fs"
@@ -13,7 +14,7 @@ var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
-	errors := []error{}
+	errs := []error{}
 	storedOxum, err := GetOxum(bagLocation)
 	if err != nil {
 		log.Printf("- ERROR - %s", err.Error())
@@ -43,7 +44,7 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
 			entries, e := ValidateManifest(manifestLoc, complete)
 			if len(e) > 0 {
-				errors = append(errors, e...)
+				errs = append(errs, e...)
 			}
 			for path := range entries {
 				dataFiles[path] = true
@@ -53,7 +54,7 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
 			_, e := ValidateManifest(manifestLoc, complete)
 			if len(e) > 0 {
-				errors = append(errors, e...)
+				errs = append(errs, e...)
 			}
 		}
 	}
@@ -72,22 +73,24 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 		}
 		return nil
 	}); err != nil {
-		errors = append(errors, err)
+		errs = append(errs, err)
 	}
 
-	if len(errors) == 0 {
+	if len(errs) == 0 {
 		log.Printf("- INFO - %s is valid", bagLocation)
-	} else {
-		errorMsgs := fmt.Sprintf("- ERROR - %s is invalid: Bag validation failed: ", bagLocation)
-		for i, e := range errors {
-			errorMsgs = errorMsgs + e.Error()
-			if i < len(errors)-1 {
-				errorMsgs = errorMsgs + "; "
-			}
-		}
-		log.Println(errorMsgs)
+		return nil
 	}
-	return nil
+
+	errorMsgs := fmt.Sprintf("- ERROR - %s is invalid: Bag validation failed: ", bagLocation)
+	for i, e := range errs {
+		errorMsgs = errorMsgs + e.Error()
+		if i < len(errs)-1 {
+			errorMsgs = errorMsgs + "; "
+		}
+	}
+	log.Println(errorMsgs)
+
+	return errors.New(errorMsgs)
 }
 
 func CreateBag(inputDir string, algorithm string, numProcesses int) error {
