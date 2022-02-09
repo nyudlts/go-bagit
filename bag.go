@@ -3,6 +3,7 @@ package go_bagit
 import (
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -36,14 +37,42 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 		return err
 	}
 
+	dataFiles := map[string]bool{}
 	for _, bagFile := range bagFiles {
 		if manifestPtn.MatchString(bagFile.Name()) == true {
 			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
-			e := ValidateManifest(manifestLoc, complete)
+			entries, e := ValidateManifest(manifestLoc, complete)
+			if len(e) > 0 {
+				errors = append(errors, e...)
+			}
+			for path := range entries {
+				dataFiles[path] = true
+			}
+		}
+		if tagmanifestPtn.MatchString(bagFile.Name()) {
+			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
+			_, e := ValidateManifest(manifestLoc, complete)
 			if len(e) > 0 {
 				errors = append(errors, e...)
 			}
 		}
+	}
+
+	dataDirName := filepath.Join(bagLocation, "data")
+	if err := filepath.WalkDir(dataDirName, func(path string, d fs.DirEntry, err error) error {
+		if dataDirName == path {
+			return nil
+		}
+		rel, err := filepath.Rel(bagLocation, path)
+		if err != nil {
+			return err
+		}
+		if _, ok := dataFiles[rel]; !ok {
+			return fmt.Errorf("%s exists on filesystem but is not in the manifest", rel)
+		}
+		return nil
+	}); err != nil {
+		errors = append(errors, err)
 	}
 
 	if len(errors) == 0 {

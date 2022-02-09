@@ -66,8 +66,7 @@ func appendToTagManifest(targetFilePath string, bagLocation string, manifestFile
 	return nil
 }
 
-func ValidateManifest(manifestLocation string, complete bool) []error {
-
+func ValidateManifest(manifestLocation string, complete bool) (map[string]string, []error) {
 	errors := []error{}
 	lastInd := strings.LastIndex(manifestLocation, "/")
 	path := manifestLocation[:lastInd]
@@ -75,7 +74,7 @@ func ValidateManifest(manifestLocation string, complete bool) []error {
 	algorithm := getAlgorithm(file)
 	manifestMap, err := ReadManifest(manifestLocation)
 	if err != nil {
-		return append(errors, err)
+		return nil, append(errors, err)
 	}
 
 	for k, v := range manifestMap {
@@ -85,9 +84,9 @@ func ValidateManifest(manifestLocation string, complete bool) []error {
 		f, err := os.Open(entryPath)
 		if err != nil {
 			if os.IsNotExist(err) {
-				return append(errors, fmt.Errorf("%s does not exist", entryPath))
+				return manifestMap, append(errors, fmt.Errorf("%s does not exist", entryPath))
 			}
-			return append(errors, err)
+			return manifestMap, append(errors, err)
 		}
 
 		if complete == false {
@@ -102,7 +101,7 @@ func ValidateManifest(manifestLocation string, complete bool) []error {
 
 		f.Close()
 	}
-	return errors
+	return manifestMap, errors
 }
 
 func getAlgorithm(filename string) string {
