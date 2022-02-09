@@ -39,6 +39,7 @@ func GetOxum(bagLocation string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
 

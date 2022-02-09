@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -17,6 +16,7 @@ func ReadManifest(path string) (map[string]string, error) {
 	if err != nil {
 		return manifestEntryMap, err
 	}
+	defer f.Close()
 	r := regexp.MustCompile("[^\\s]+")
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
@@ -82,11 +82,11 @@ func ValidateManifest(manifestLocation string, complete bool) []error {
 		entryPath := filepath.Join(path, k)
 		absolutePath, _ := filepath.Abs(entryPath)
 
-		if err := entryExists(entryPath); err != nil {
-			return append(errors, err)
-		}
 		f, err := os.Open(entryPath)
 		if err != nil {
+			if os.IsNotExist(err) {
+				return append(errors, fmt.Errorf("%s does not exist", entryPath))
+			}
 			return append(errors, err)
 		}
 
@@ -99,20 +99,10 @@ func ValidateManifest(manifestLocation string, complete bool) []error {
 				errors = append(errors, err)
 			}
 		}
+
+		f.Close()
 	}
 	return errors
-}
-
-
-
-func entryExists(path string) error {
-	if _, err := os.Stat(path); err == nil {
-		return nil
-	} else if os.IsNotExist(err) {
-		return fmt.Errorf("%s does not exist", path)
-	} else {
-		return err
-	}
 }
 
 func getAlgorithm(filename string) string {
@@ -154,7 +144,7 @@ func CreateManifest(manifestName string, bagLoc string, algorithm string, numPro
 
 func CreateTagManifest(inputDir string, algorithm string, numProcesses int) error {
 
-	files, err := ioutil.ReadDir(inputDir)
+	files, err := os.ReadDir(inputDir)
 	if err != nil {
 		return err
 	}
