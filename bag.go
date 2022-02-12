@@ -61,7 +61,7 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 
 	dataDirName := filepath.Join(bagLocation, "data")
 	if err := filepath.WalkDir(dataDirName, func(path string, d fs.DirEntry, err error) error {
-		if dataDirName == path {
+		if d.IsDir() || dataDirName == path {
 			return nil
 		}
 		rel, err := filepath.Rel(bagLocation, path)
