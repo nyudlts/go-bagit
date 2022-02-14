@@ -40,6 +40,16 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 
 	dataFiles := map[string]bool{}
 	for _, bagFile := range bagFiles {
+		if tagmanifestPtn.MatchString(bagFile.Name()) {
+			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
+			_, e := ValidateManifest(manifestLoc, complete)
+			if len(e) > 0 {
+				errs = append(errs, e...)
+				errorMsgs := gatherErrors(errs, bagLocation)
+				return errors.New(errorMsgs)
+			}
+		}
+
 		if manifestPtn.MatchString(bagFile.Name()) == true {
 			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
 			entries, e := ValidateManifest(manifestLoc, complete)
@@ -50,13 +60,7 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 				dataFiles[path] = true
 			}
 		}
-		if tagmanifestPtn.MatchString(bagFile.Name()) {
-			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
-			_, e := ValidateManifest(manifestLoc, complete)
-			if len(e) > 0 {
-				errs = append(errs, e...)
-			}
-		}
+
 	}
 
 	dataDirName := filepath.Join(bagLocation, "data")
@@ -81,6 +85,11 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 		return nil
 	}
 
+	errorMsgs := gatherErrors(errs, bagLocation)
+	return errors.New(errorMsgs)
+}
+
+func gatherErrors(errs []error, bagLocation string) string {
 	errorMsgs := fmt.Sprintf("- ERROR - %s is invalid: Bag validation failed: ", bagLocation)
 	for i, e := range errs {
 		errorMsgs = errorMsgs + e.Error()
@@ -89,8 +98,7 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 		}
 	}
 	log.Println(errorMsgs)
-
-	return errors.New(errorMsgs)
+	return errorMsgs
 }
 
 func CreateBag(inputDir string, algorithm string, numProcesses int) error {
