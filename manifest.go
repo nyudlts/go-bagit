@@ -2,15 +2,74 @@ package go_bagit
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io/fs"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 )
 
-func ReadManifest(path string) (map[string]string, error) {
+type Manifest struct {
+	Bag       string
+	Filename  string
+	EntryMap  map[string]string
+	Algorithm string
+}
+
+func NewManifest(bag string, filename string) (Manifest, error) {
+	manifestPath := filepath.Join(bag, filename)
+	entryMap, err := ReadManifestMap(manifestPath)
+	if err != nil {
+		return Manifest{}, err
+	}
+	algorithm := getAlgorithm(manifestPath)
+	return Manifest{bag, filename, entryMap, algorithm}, nil
+}
+
+func (manifest Manifest) UpdateManifest(filename string) error {
+	fileLocation := filepath.Join(manifest.Bag, filename)
+	file, err := os.Open(fileLocation)
+	if err != nil {
+		return err
+	}
+
+	checksum, err := GenerateChecksum(file, manifest.Algorithm)
+	if err != nil {
+		return err
+	}
+
+	manifest.EntryMap[filename] = checksum
+
+	return nil
+}
+
+func (manifest Manifest) Serialize() error {
+	outfile := filepath.Join(manifest.Bag, manifest.Filename)
+	if _, err := os.Stat(outfile); err == nil {
+		// remove the file
+		if err := os.Remove(outfile); err != nil {
+			return err
+		}
+	} else if errors.Is(err, os.ErrNotExist) {
+		// do nothing
+	} else {
+		return err
+	}
+
+	entries := []byte{}
+	for filename, checksum := range manifest.EntryMap {
+		entries = append(entries, []byte(fmt.Sprintf("%s %s\n", checksum, filename))...)
+	}
+	if err := ioutil.WriteFile(outfile, entries, 0777); err != nil {
+		return err
+	}
+	return nil
+}
+
+func ReadManifestMap(path string) (map[string]string, error) {
 	manifestEntryMap := map[string]string{}
 	f, err := os.Open(path)
 	if err != nil {
@@ -49,7 +108,7 @@ func appendToTagManifest(targetFilePath string, bagLocation string, manifestFile
 	if err != nil {
 		return err
 	}
-	entry := fmt.Sprintf("%s  %s", checksum, targetFileInfo.Name())
+	entry := fmt.Sprintf("%s %s", checksum, targetFileInfo.Name())
 
 	//open the manifest file
 	manifestFile, err := os.OpenFile(manifestLocation, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
@@ -72,7 +131,7 @@ func ValidateManifest(manifestLocation string, complete bool) (map[string]string
 	path := manifestLocation[:lastInd]
 	file := manifestLocation[lastInd:]
 	algorithm := getAlgorithm(file)
-	manifestMap, err := ReadManifest(manifestLocation)
+	manifestMap, err := ReadManifestMap(manifestLocation)
 	if err != nil {
 		return nil, append(errors, err)
 	}
@@ -106,7 +165,7 @@ func ValidateManifest(manifestLocation string, complete bool) (map[string]string
 
 func getAlgorithm(filename string) string {
 	split := strings.Split(filename, "-")
-	removeExtension := strings.Split(split[len(split) - 1], ".")
+	removeExtension := strings.Split(split[len(split)-1], ".")
 	return removeExtension[0]
 }
 
