@@ -1,9 +1,14 @@
 package go_bagit
 
 import (
+	"bufio"
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
+	"sort"
+	"strings"
 )
 
 var StandardTags = GetStandardTags()
@@ -22,8 +27,8 @@ func CreateBagInfo() TagSet {
 	return TagSet{
 		Filename: "bag-info.txt",
 		Tags: map[string]string{
-			StandardTags.BagSoftwareAgent: fmt.Sprintf("go-bagit %s <https://github.com/nyudlts/go-bagit>", libraryVersion),
-			StandardTags.BaggingDate: fmt.Sprintf(currentTime.Format("2006-02-01")),
+			StandardTags.BagSoftwareAgent: GetSoftwareAgent(),
+			StandardTags.BaggingDate:      fmt.Sprintf(currentTime.Format("2006-02-01")),
 		},
 	}
 }
@@ -34,11 +39,44 @@ type TagSet struct {
 	Tags     map[string]string
 }
 
-func (t TagSet) Serialize() error {
-	outfile := filepath.Join(t.Path, t.Filename)
+func NewTagSet(filename string, bagLocation string) (TagSet, error) {
+	tagFileLocation := filepath.Join(bagLocation, filename)
+	tags := map[string]string{}
+	tagFile, err := os.Open(tagFileLocation)
+	if err != nil {
+		return TagSet{}, err
+	}
+	scanner := bufio.NewScanner(tagFile)
+	for scanner.Scan() {
+		kv := strings.Split(scanner.Text(), ": ")
+		tags[kv[0]] = kv[1]
+	}
+	return TagSet{filename, bagLocation, tags}, nil
+}
+
+func (tagSet TagSet) Serialize() error {
+	outfile := filepath.Join(tagSet.Path, tagSet.Filename)
+	if _, err := os.Stat(outfile); err == nil {
+		// remove the file
+		if err := os.Remove(outfile); err != nil {
+			return err
+		}
+	} else if errors.Is(err, os.ErrNotExist) {
+		// do nothing
+	} else {
+		return err
+	}
+
+	//get a keyset and sort the keys
+	keys := make([]string, 0)
+	for k, _ := range tagSet.Tags {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	tags := []byte{}
-	for k, v := range t.Tags {
-		tags = append(tags, []byte(fmt.Sprintf("%s: %s\n", k, v))...)
+	for _, k := range keys {
+		tags = append(tags, []byte(fmt.Sprintf("%s: %s\n", k, tagSet.Tags[k]))...)
 	}
 	if err := ioutil.WriteFile(outfile, tags, 0777); err != nil {
 		return err
@@ -82,4 +120,27 @@ func GetStandardTags() StandardTagSet {
 	standardTags.InternalSenderIdentifier = "Internal_Sender_Identifier"
 	standardTags.InternalSenderDescription = "Internal_Sender_Description"
 	return standardTags
+}
+
+func (tagset TagSet) AddTags(newTags map[string]string) {
+	for k, v := range newTags {
+		tagset.Tags[k] = v
+	}
+}
+
+func (tagSet TagSet) HasTag(key string) bool {
+	for k, _ := range tagSet.Tags {
+		if k == key {
+			return true
+		}
+	}
+	return false
+}
+
+func (tagSet TagSet) UpdateTagFile(key string, value string) {
+	for k, _ := range tagSet.Tags {
+		if k == key {
+			tagSet.Tags[k] = value
+		}
+	}
 }

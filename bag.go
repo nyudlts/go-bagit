@@ -227,24 +227,14 @@ func AddFileToBag(bagLocation string, file string) error {
 	}
 	targetFile.Close()
 
-	//locate any tag manifest files
-	bagFiles, err := os.ReadDir(bagLocation)
+	//locate the tagmanifest
+	tagmanifest, err := FindFileInBag(bagLocation, regexp.MustCompile("tagmanifest"))
 	if err != nil {
 		return err
 	}
 
-	for _, bagFile := range bagFiles {
-		if tagmanifestPtn.MatchString(bagFile.Name()) {
-			//add the file to the tag-manifest
-			err := appendToTagManifest(targetFilePath, bagLocation, bagFile.Name())
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	//validate the bag
-	if err := ValidateBag(bagLocation, false, false); err != nil {
+	//append new file to tagmanifest
+	if err := appendToTagManifest(targetFilePath, bagLocation, filepath.Base(tagmanifest)); err != nil {
 		return err
 	}
 
@@ -277,4 +267,34 @@ func directoryExists(inputDir string) error {
 	} else {
 		return err
 	}
+}
+
+func GetFilesInBag(bagLocation string) ([]string, error) {
+	bagFiles := []string{}
+	err := filepath.Walk(bagLocation, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() != true {
+			bagFiles = append(bagFiles, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return bagFiles, err
+	}
+	return bagFiles, nil
+}
+
+func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
+	bagFiles, err := GetFilesInBag(bagLocation)
+	if err != nil {
+		return "", err
+	}
+	for _, p := range bagFiles {
+		if matcher.MatchString(p) {
+			return p, nil
+		}
+	}
+	return "", fmt.Errorf("Could not locate file pattern in bag")
 }
