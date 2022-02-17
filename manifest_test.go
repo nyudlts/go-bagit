@@ -9,7 +9,7 @@ import (
 func TestManifests(t *testing.T) {
 	t.Run("Test Parsing Manifest", func(t *testing.T) {
 		manifestLoc := filepath.Join("test", "valid", "manifest-sha256.txt")
-		manifestMap, err := ReadManifest(manifestLoc)
+		manifestMap, err := ReadManifestMap(manifestLoc)
 		if err != nil {
 			t.Error(err)
 		}
