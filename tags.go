@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -66,9 +67,16 @@ func (tagSet TagSet) Serialize() error {
 		return err
 	}
 
+	//get a keyset and sort the keys
+	keys := make([]string, 0)
+	for k, _ := range tagSet.Tags {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	tags := []byte{}
-	for k, v := range tagSet.Tags {
-		tags = append(tags, []byte(fmt.Sprintf("%s: %s\n", k, v))...)
+	for _, k := range keys {
+		tags = append(tags, []byte(fmt.Sprintf("%s: %s\n", k, tagSet.Tags[k]))...)
 	}
 	if err := ioutil.WriteFile(outfile, tags, 0777); err != nil {
 		return err
