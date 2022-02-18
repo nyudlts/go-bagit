@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,6 +13,53 @@ import (
 
 var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
+
+type Bag struct {
+	Path      string
+	Manifests []Manifest
+	TagSets   []TagSet
+}
+
+func NewBag(path string) (*Bag, error) {
+	bag, err := initBag(path)
+	if err != nil {
+		return bag, err
+	}
+	err = bag.gatherManifests()
+	if err != nil {
+		return bag, err
+	}
+	return bag, nil
+}
+
+func initBag(path string) (*Bag, error) {
+	bag := Bag{}
+	if err := DirectoryExists(path); err != nil {
+		return &bag, err
+	}
+	bag.Path = path
+	return &bag, nil
+}
+
+func (bag *Bag) gatherManifests() error {
+
+	files, err := ioutil.ReadDir(bag.Path)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+
+		if manifestPtn.MatchString(file.Name()) {
+			manifest, err := NewManifest(bag.Path, file.Name())
+			if err != nil {
+				panic(err)
+			}
+			bag.Manifests = append(bag.Manifests, manifest)
+		}
+	}
+	return nil
+}
 
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	errs := []error{}

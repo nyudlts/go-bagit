@@ -6,6 +6,30 @@ import (
 	"testing"
 )
 
+func TestBagStruct(t *testing.T) {
+
+	t.Run("It will error on invalid directory", func(t *testing.T) {
+		_, err := NewBag("test/invalid-bag-path")
+		if err != nil {
+			t.Log(err)
+		} else {
+			t.Errorf("Created a bag for an invalid path")
+		}
+	})
+
+	t.Run("It can create a Bag type", func(t *testing.T) {
+		bag, err := NewBag("test/valid")
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+		want := 2
+		got := len(bag.Manifests)
+		if want != got {
+			t.Errorf("wanted %d got %d", want, got)
+		}
+	})
+}
+
 func TestValidateBag(t *testing.T) {
 	tests := map[string]struct {
 		loc  string
