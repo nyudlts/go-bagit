@@ -1,11 +1,32 @@
 package go_bagit
 
-import (
-	"path/filepath"
-	"strings"
-	"testing"
-)
+import "testing"
 
+var testBagLoc = "/var/archivematica/sharedDirectory/www/AIPStore/0a3a/994e/4f60/494a/9f98/5b36/acfa/8cbb/TW_TAM_235-0a3a994e-4f60-494a-9f98-5b36acfa8cbb/"
+
+func TestBag(t *testing.T) {
+	var bag *Bag
+	var err error
+	t.Run("Test getting bag from FS", func(t *testing.T) {
+		bag, err = GetBag(testBagLoc)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+	})
+
+	t.Run("Test validating bag", func(t *testing.T) {
+		err := bag.ValidateBag()
+		if err != nil {
+			t.Error(err)
+		}
+	})
+
+	t.Run("Test printing bag info", func(t *testing.T) {
+		t.Log(bag)
+	})
+}
+
+/*
 func TestValidateBag(t *testing.T) {
 	tests := map[string]struct {
 		loc  string
@@ -55,3 +76,5 @@ func TestValidateBag(t *testing.T) {
 		})
 	}
 }
+
+*/

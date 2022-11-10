@@ -1,10 +1,7 @@
 package go_bagit
 
 import (
-	"errors"
 	"fmt"
-	"io"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -14,9 +11,83 @@ var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
 type Bag struct {
-	Path string
+	Path       string
+	PayloadDir string
+	Oxum       Oxum
 }
 
+func (bag Bag) String() string {
+	return fmt.Sprintf("%s\nOxum: %s\n", bag.Path, bag.Oxum.String())
+}
+
+func GetBag(path string) (*Bag, error) {
+	err := PathExists(path)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, _ := os.Stat(path)
+	if !fi.IsDir() {
+		return nil, fmt.Errorf("%s is not a directory", path)
+	}
+
+	//create a Bag, set the path to the bag
+	b := Bag{}
+	b.Path = path
+
+	//get the Oxem
+	storedOxum, err := GetOxum(b.Path)
+	if err != nil {
+		return nil, err
+	}
+	oxum, err := ParseOxumString(storedOxum)
+	if err != nil {
+		return nil, err
+	}
+	b.Oxum = oxum
+
+	//get the payload directory
+	payloadDir := filepath.Join(b.Path, "data")
+	err = PathExists(payloadDir)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, _ = os.Stat(payloadDir)
+	if !fi.IsDir() {
+		return nil, fmt.Errorf("%s is not a directory", path)
+	}
+
+	b.PayloadDir = payloadDir
+
+	return &b, nil
+
+}
+
+func (bag *Bag) ValidateBag() error {
+	err := bag.ValidateOxum()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (bag *Bag) ValidateOxum() error {
+
+	calculatedOxum, err := CalculateOxum(bag.Path)
+	if err != nil {
+		return err
+	}
+
+	if calculatedOxum.Size != bag.Oxum.Size || calculatedOxum.Count != bag.Oxum.Count {
+		return fmt.Errorf("%s is invalid: Payload-Oxum validation failed. Expected %d files and %v bytes but found %d files and %v bytes",
+			bag.Path, bag.Oxum.Count, bag.Oxum.Size, calculatedOxum.Count, calculatedOxum.Size)
+	}
+
+	return nil
+}
+
+/*
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	errs := []error{}
 	storedOxum, err := GetOxum(bagLocation)
@@ -302,3 +373,5 @@ func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
 	}
 	return "", fmt.Errorf("Could not locate file pattern in bag")
 }
+
+*/

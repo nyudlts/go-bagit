@@ -1,7 +1,9 @@
 package go_bagit
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"runtime/debug"
 	"time"
 )
@@ -25,4 +27,14 @@ func GetSoftwareAgent() string {
 	}
 
 	return fmt.Sprintf("go-bagit %s <https://%s>", version, mod)
+}
+
+func PathExists(path string) error {
+	if _, err := os.Stat(path); err == nil {
+		return nil
+	} else if errors.Is(err, os.ErrNotExist) {
+		return err
+	} else {
+		return err
+	}
 }

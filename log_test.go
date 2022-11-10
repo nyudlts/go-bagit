@@ -1,13 +1,6 @@
 package go_bagit_test
 
-import (
-	"bytes"
-	stdlog "log"
-	"testing"
-
-	go_bagit "github.com/nyudlts/go-bagit"
-)
-
+/*
 func TestWithLogger(t *testing.T) {
 	t.Run("It panics when a nil value is passed", func(t *testing.T) {
 		defer func() {
@@ -44,3 +37,4 @@ func TestLogger(t *testing.T) {
 		}
 	})
 }
+*/
