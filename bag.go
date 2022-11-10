@@ -13,6 +13,10 @@ import (
 var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
+type Bag struct {
+	Path string
+}
+
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	errs := []error{}
 	storedOxum, err := GetOxum(bagLocation)
