@@ -2,9 +2,7 @@ package go_bagit
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -54,20 +52,7 @@ func NewTagSet(filename string, bagLocation string) (TagSet, error) {
 	return TagSet{filename, bagLocation, tags}, nil
 }
 
-func (tagSet TagSet) Serialize() error {
-	outfile := filepath.Join(tagSet.Path, tagSet.Filename)
-	if _, err := os.Stat(outfile); err == nil {
-		// remove the file
-		if err := os.Remove(outfile); err != nil {
-			return err
-		}
-	} else if errors.Is(err, os.ErrNotExist) {
-		// do nothing
-	} else {
-		return err
-	}
-
-	//get a keyset and sort the keys
+func (tagSet TagSet) GetTagSetAsByteSlice() []byte {
 	keys := make([]string, 0)
 	for k, _ := range tagSet.Tags {
 		keys = append(keys, k)
@@ -78,10 +63,7 @@ func (tagSet TagSet) Serialize() error {
 	for _, k := range keys {
 		tags = append(tags, []byte(fmt.Sprintf("%s: %s\n", k, tagSet.Tags[k]))...)
 	}
-	if err := ioutil.WriteFile(outfile, tags, 0777); err != nil {
-		return err
-	}
-	return nil
+	return tags
 }
 
 type StandardTagSet struct {
