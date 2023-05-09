@@ -44,11 +44,14 @@ func NewTagSet(filename string, bagLocation string) (TagSet, error) {
 	if err != nil {
 		return TagSet{}, err
 	}
+
 	scanner := bufio.NewScanner(tagFile)
 	for scanner.Scan() {
 		kv := strings.Split(scanner.Text(), ": ")
 		tags[kv[0]] = kv[1]
 	}
+
+	tagFile.Close()
 	return TagSet{filename, bagLocation, tags}, nil
 }
 
