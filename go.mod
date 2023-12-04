@@ -1,6 +1,6 @@
 module github.com/nyudlts/go-bagit
 
-go 1.17
+go 1.21.4
 
 require github.com/spf13/cobra v1.3.0
 
