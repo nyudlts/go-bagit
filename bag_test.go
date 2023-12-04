@@ -2,6 +2,7 @@ package go_bagit
 
 import (
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -54,4 +55,22 @@ func TestValidateBag(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestFindFileInBag(t *testing.T) {
+	t.Run("Test FindFileInBag()", func(t *testing.T) {
+		bagRoot := filepath.Join("test", "valid-with-subdirs")
+
+		want := "test/valid-with-subdirs/data/logs/output2.log"
+		wantPtn := regexp.MustCompile("output2.log$")
+
+		got, err := FindFileInBag(bagRoot, wantPtn)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if want != got {
+			t.Errorf("\n%v !=\n%v", want, got)
+		}
+	})
 }
