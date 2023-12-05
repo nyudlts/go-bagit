@@ -336,14 +336,30 @@ func GetDirsInBag(bagLocation string) ([]string, error) {
 }
 
 func FindDirInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
-	bagFiles, err := GetDirsInBag(bagLocation)
+	bagDirs, err := GetDirsInBag(bagLocation)
 	if err != nil {
 		return "", err
 	}
-	for _, p := range bagFiles {
+	for _, p := range bagDirs {
 		if matcher.MatchString(p) {
 			return p, nil
 		}
 	}
 	return "", fmt.Errorf("Could not locate directory pattern in bag")
+}
+
+func FindDirsInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error) {
+	var results []string
+
+	bagDirs, err := GetDirsInBag(bagLocation)
+	if err != nil {
+		return results, err
+	}
+
+	for _, p := range bagDirs {
+		if matcher.MatchString(p) {
+			results = append(results, p)
+		}
+	}
+	return results, nil
 }

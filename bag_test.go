@@ -217,3 +217,40 @@ func TestFindDirInBag(t *testing.T) {
 		}
 	})
 }
+
+func TestFindDirsInBag(t *testing.T) {
+	t.Run("Test FindDirsInBag()", func(t *testing.T) {
+		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
+
+		want := []string{
+			"test/valid-erecord-with-subdirs/data/logs/transfers/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5",
+			"test/valid-erecord-with-subdirs/data/objects/metadata/transfers/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5",
+		}
+		wantPtn := regexp.MustCompile("/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5$")
+
+		got, err := FindDirsInBag(bagRoot, wantPtn)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if len(want) != len(got) {
+			t.Fatalf("length of returned slice, (%d) does not match expectations (%d)", len(got), len(want))
+		}
+
+		slices.Sort(want)
+		slices.Sort(got)
+
+		status := true
+		msg := ""
+		for i := 0; i < len(want); i++ {
+			if want[i] != got[i] {
+				status = false
+				msg = msg + "\n" + fmt.Sprintf("%v != %v", want[i], got[i])
+			}
+		}
+		if !status {
+			t.Fatal(msg)
+		}
+	})
+
+}
