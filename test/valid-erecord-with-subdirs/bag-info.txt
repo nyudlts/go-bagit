@@ -1,0 +1,21 @@
+Bag-Software-Agent: bagit.py v1.7.0 <https://github.com/LibraryOfCongress/bagit-python>
+Bagging-Date: 2023-11-21
+Contact-Email: archivist@nyu.edu
+Contact-Name:  archivist
+Contact-Phone: +1-212.555.5555
+External-Identifier: 2255f60b-2b07-4ecc-9bfd-3421188493d7
+Internal-Sender-Identifier: dlts/test
+Organization-Address: 70 Washington Square South, New York, NY 10012
+Payload-Oxum: 440656.15
+Source-Organization: ACM
+nyu-dl-content-classification: open
+nyu-dl-content-type: electronic_records
+nyu-dl-hostname: pco01la-1646s.cfs.its.nyu.edu
+nyu-dl-package-format: 0.1.0
+nyu-dl-pathname: /var/archivematica/tmp/fales_mss2023_cuid39675-2255f60b-2b07-4ecc-9bfd-3421188493d7
+nyu-dl-project-name: dlts/test
+nyu-dl-resource-id: MSS.2023
+nyu-dl-resource-title: Weatherly Test Records
+nyu-dl-resource-url: /repositories/3/resources/3472
+nyu-dl-rstar-collection-id: b9612d5d-619a-4ceb-b620-d816e4b4340b
+nyu-dl-use-statement: video-reading-room

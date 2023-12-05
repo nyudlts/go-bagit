@@ -301,3 +301,20 @@ func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
 	}
 	return "", fmt.Errorf("Could not locate file pattern in bag")
 }
+
+func GetDirsInBag(bagLocation string) ([]string, error) {
+	bagDirs := []string{}
+	err := filepath.Walk(bagLocation, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			bagDirs = append(bagDirs, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return bagDirs, err
+	}
+	return bagDirs, nil
+}

@@ -1,0 +1,15 @@
+Contact-Email: archivist@nyu.edu
+Contact-Name:  archivist
+Contact-Phone: +1-212.555.5555
+Internal-Sender-Identifier: dlts/test
+Organization-Address: 70 Washington Square South, New York, NY 10012
+Source-Organization: ACM
+nyu-dl-resource-url: /repositories/3/resources/3472
+nyu-dl-resource-id: MSS.2023
+nyu-dl-resource-title: Weatherly Test Records
+nyu-dl-content-type: electronic_records
+nyu-dl-content-classification: open
+nyu-dl-project-name: dlts/test
+nyu-dl-rstar-collection-id: b9612d5d-619a-4ceb-b620-d816e4b4340b
+nyu-dl-package-format: 0.1.0
+nyu-dl-use-statement: video-reading-room

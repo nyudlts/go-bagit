@@ -1,0 +1,704 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mets:mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mets="http://www.loc.gov/METS/" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version1121/mets.xsd" OBJID="48b63462-0fec-4f6a-8913-1f2e2f9168e5">
+  <mets:metsHdr CREATEDATE="2023-11-21T14:26:29">
+    <mets:agent ROLE="CREATOR" TYPE="OTHER" OTHERTYPE="SOFTWARE">
+      <mets:name>9929ae74-9a02-45b3-a28b-f3922f8b28e3</mets:name>
+      <mets:note>Archivematica dashboard UUID</mets:note>
+    </mets:agent>
+  </mets:metsHdr>
+  <mets:amdSec ID="amdSec_77434">
+    <mets:techMD ID="techMD_77434" CREATED="2023-11-21T14:26:29" STATUS="current">
+      <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+        <mets:xmlData>
+          <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0" xsi:type="premis:file">
+            <premis:objectIdentifier>
+              <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+              <premis:objectIdentifierValue>db381d24-1da9-4251-94b6-ee0416100bd3</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+              <premis:compositionLevel>0</premis:compositionLevel>
+              <premis:fixity>
+                <premis:messageDigestAlgorithm>SHA-256</premis:messageDigestAlgorithm>
+                <premis:messageDigest>d1292c9ce2fc379a524a7604ac54f1bd00dec0c4a82cca52b5a028e6038b4315</premis:messageDigest>
+              </premis:fixity>
+              <premis:size>53409</premis:size>
+              <premis:format>
+                <premis:formatDesignation>
+                  <premis:formatName>MPEG-4 Media File</premis:formatName>
+                  <premis:formatVersion></premis:formatVersion>
+                </premis:formatDesignation>
+                <premis:formatRegistry>
+                  <premis:formatRegistryName>PRONOM</premis:formatRegistryName>
+                  <premis:formatRegistryKey>fmt/199</premis:formatRegistryKey>
+                </premis:formatRegistry>
+              </premis:format>
+              <premis:creatingApplication>
+                <premis:dateCreatedByApplication>2023-11-21T08:51:21Z</premis:dateCreatedByApplication>
+              </premis:creatingApplication>
+              <premis:objectCharacteristicsExtension>
+                <ffprobe>
+    <program_version version="3.4.11-0ubuntu0.1" copyright="Copyright (c) 2007-2022 the FFmpeg developers" compiler_ident="gcc 7 (Ubuntu 7.5.0-3ubuntu1~18.04)" configuration="--prefix=/usr --extra-version=0ubuntu0.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librubberband --enable-librsvg --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libopencv --enable-libx264 --enable-shared"/>
+
+    <library_versions>
+        <library_version name="libavutil" major="55" minor="78" micro="100" version="3624548" ident="Lavu55.78.100"/>
+        <library_version name="libavcodec" major="57" minor="107" micro="100" version="3763044" ident="Lavc57.107.100"/>
+        <library_version name="libavformat" major="57" minor="83" micro="100" version="3756900" ident="Lavf57.83.100"/>
+        <library_version name="libavdevice" major="57" minor="10" micro="100" version="3738212" ident="Lavd57.10.100"/>
+        <library_version name="libavfilter" major="6" minor="107" micro="100" version="420708" ident="Lavfi6.107.100"/>
+        <library_version name="libswscale" major="4" minor="8" micro="100" version="264292" ident="SwS4.8.100"/>
+        <library_version name="libswresample" major="2" minor="9" micro="100" version="133476" ident="SwR2.9.100"/>
+        <library_version name="libpostproc" major="54" minor="7" micro="100" version="3540836" ident="postproc54.7.100"/>
+    </library_versions>
+
+    <streams>
+        <stream index="0" codec_name="h264" codec_long_name="H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10" profile="Constrained Baseline" codec_type="video" codec_time_base="1/60" codec_tag_string="avc1" codec_tag="0x31637661" width="320" height="240" coded_width="320" coded_height="240" has_b_frames="0" sample_aspect_ratio="0:1" display_aspect_ratio="0:1" pix_fmt="yuv420p" level="13" chroma_location="left" refs="1" is_avc="true" nal_length_size="4" r_frame_rate="30/1" avg_frame_rate="30/1" time_base="1/30000" start_pts="0" start_time="0.000000" duration_ts="90000" duration="3.000000" bit_rate="82122" bits_per_raw_sample="8" nb_frames="90" extradata=" 00000000: 0142 c00d ffe1 0015 6742 c00d f202 83f4  .B......gB...... 00000010: 2000 0003 0020 0000 0791 e285 4901 0005   .... ......I... 00000020: 68cb 83cb 20                             h...  ">
+            <disposition default="1" dub="0" original="0" comment="0" lyrics="0" karaoke="0" forced="0" hearing_impaired="0" visual_impaired="0" clean_effects="0" attached_pic="0" timed_thumbnails="0"/>
+            <tag key="creation_time" value="2010-11-17T02:26:48.000000Z"/>
+            <tag key="language" value="und"/>
+            <tag key="handler_name" value="GPAC ISO Video Handler"/>
+        </stream>
+        <stream index="1" codec_name="aac" codec_long_name="AAC (Advanced Audio Coding)" profile="LC" codec_type="audio" codec_time_base="1/44100" codec_tag_string="mp4a" codec_tag="0x6134706d" sample_fmt="fltp" sample_rate="44100" channels="1" channel_layout="mono" bits_per_sample="0" r_frame_rate="0/0" avg_frame_rate="0/0" time_base="1/44100" start_pts="0" start_time="0.000000" duration_ts="135168" duration="3.065034" bit_rate="53112" max_bit_rate="54624" nb_frames="132" extradata=" 00000000: 1208 56e5 00                             ..V.. ">
+            <disposition default="1" dub="0" original="0" comment="0" lyrics="0" karaoke="0" forced="0" hearing_impaired="0" visual_impaired="0" clean_effects="0" attached_pic="0" timed_thumbnails="0"/>
+            <tag key="creation_time" value="2010-11-17T02:26:48.000000Z"/>
+            <tag key="language" value="und"/>
+            <tag key="handler_name" value="GPAC ISO Audio Handler"/>
+        </stream>
+    </streams>
+
+    <chapters>
+    </chapters>
+
+    <format filename="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/A4.mp4" nb_streams="2" nb_programs="0" format_name="mov,mp4,m4a,3gp,3g2,mj2" format_long_name="QuickTime / MOV" start_time="0.000000" duration="3.065000" size="53409" bit_rate="139403" probe_score="100">
+        <tag key="major_brand" value="isom"/>
+        <tag key="minor_version" value="1"/>
+        <tag key="compatible_brands" value="isomavc1"/>
+        <tag key="creation_time" value="2010-11-17T02:26:48.000000Z"/>
+    </format>
+</ffprobe>
+              </premis:objectCharacteristicsExtension>
+              <premis:objectCharacteristicsExtension>
+                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description xmlns:et="http://ns.exiftool.ca/1.0/" xmlns:ExifTool="http://ns.exiftool.ca/ExifTool/1.0/" xmlns:System="http://ns.exiftool.ca/File/System/1.0/" xmlns:File="http://ns.exiftool.ca/File/1.0/" xmlns:QuickTime="http://ns.exiftool.ca/QuickTime/QuickTime/1.0/" xmlns:Track1="http://ns.exiftool.ca/QuickTime/Track1/1.0/" xmlns:Track2="http://ns.exiftool.ca/QuickTime/Track2/1.0/" xmlns:Composite="http://ns.exiftool.ca/Composite/1.0/" rdf:about="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/A4.mp4" et:toolkit="Image::ExifTool 10.80">
+ <ExifTool:ExifToolVersion>10.80</ExifTool:ExifToolVersion>
+ <System:FileName>A4.mp4</System:FileName>
+ <System:Directory>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675</System:Directory>
+ <System:FileSize>52 kB</System:FileSize>
+ <System:FileModifyDate>2023:11:21 08:51:21+00:00</System:FileModifyDate>
+ <System:FileAccessDate>2023:11:21 14:26:19+00:00</System:FileAccessDate>
+ <System:FileInodeChangeDate>2023:11:21 14:26:16+00:00</System:FileInodeChangeDate>
+ <System:FilePermissions>rwxrwxr--</System:FilePermissions>
+ <File:FileType>MP4</File:FileType>
+ <File:FileTypeExtension>mp4</File:FileTypeExtension>
+ <File:MIMEType>video/mp4</File:MIMEType>
+ <QuickTime:MajorBrand>MP4  Base Media v1 [IS0 14496-12:2003]</QuickTime:MajorBrand>
+ <QuickTime:MinorVersion>0.0.1</QuickTime:MinorVersion>
+ <QuickTime:CompatibleBrands>
+  <rdf:Bag>
+   <rdf:li>isom</rdf:li>
+   <rdf:li>avc1</rdf:li>
+  </rdf:Bag>
+ </QuickTime:CompatibleBrands>
+ <QuickTime:MovieHeaderVersion>0</QuickTime:MovieHeaderVersion>
+ <QuickTime:CreateDate>2010:11:17 02:26:48</QuickTime:CreateDate>
+ <QuickTime:ModifyDate>2010:11:17 02:26:48</QuickTime:ModifyDate>
+ <QuickTime:TimeScale>600</QuickTime:TimeScale>
+ <QuickTime:Duration>3.06 s</QuickTime:Duration>
+ <QuickTime:PreferredRate>1</QuickTime:PreferredRate>
+ <QuickTime:PreferredVolume>100.00%</QuickTime:PreferredVolume>
+ <QuickTime:MatrixStructure>1 0 0 0 1 0 0 0 1</QuickTime:MatrixStructure>
+ <QuickTime:PreviewTime>0 s</QuickTime:PreviewTime>
+ <QuickTime:PreviewDuration>0 s</QuickTime:PreviewDuration>
+ <QuickTime:PosterTime>0 s</QuickTime:PosterTime>
+ <QuickTime:SelectionTime>0 s</QuickTime:SelectionTime>
+ <QuickTime:SelectionDuration>0 s</QuickTime:SelectionDuration>
+ <QuickTime:CurrentTime>0 s</QuickTime:CurrentTime>
+ <QuickTime:NextTrackID>3</QuickTime:NextTrackID>
+ <QuickTime:MovieDataSize>51145</QuickTime:MovieDataSize>
+ <QuickTime:MovieDataOffset>2168</QuickTime:MovieDataOffset>
+ <Track1:TrackHeaderVersion>0</Track1:TrackHeaderVersion>
+ <Track1:TrackCreateDate>2010:11:17 02:26:48</Track1:TrackCreateDate>
+ <Track1:TrackModifyDate>2010:11:17 02:26:48</Track1:TrackModifyDate>
+ <Track1:TrackID>1</Track1:TrackID>
+ <Track1:TrackDuration>3.00 s</Track1:TrackDuration>
+ <Track1:TrackLayer>0</Track1:TrackLayer>
+ <Track1:TrackVolume>0.00%</Track1:TrackVolume>
+ <Track1:MatrixStructure>1 0 0 0 1 0 0 0 1</Track1:MatrixStructure>
+ <Track1:ImageWidth>320</Track1:ImageWidth>
+ <Track1:ImageHeight>240</Track1:ImageHeight>
+ <Track1:MediaHeaderVersion>0</Track1:MediaHeaderVersion>
+ <Track1:MediaCreateDate>2010:11:17 02:26:48</Track1:MediaCreateDate>
+ <Track1:MediaModifyDate>2010:11:17 02:26:48</Track1:MediaModifyDate>
+ <Track1:MediaTimeScale>30000</Track1:MediaTimeScale>
+ <Track1:MediaDuration>3.00 s</Track1:MediaDuration>
+ <Track1:MediaLanguageCode>und</Track1:MediaLanguageCode>
+ <Track1:HandlerType>Video Track</Track1:HandlerType>
+ <Track1:HandlerDescription>GPAC ISO Video Handler</Track1:HandlerDescription>
+ <Track1:GraphicsMode>srcCopy</Track1:GraphicsMode>
+ <Track1:OpColor>0 0 0</Track1:OpColor>
+ <Track1:CompressorID>avc1</Track1:CompressorID>
+ <Track1:SourceImageWidth>320</Track1:SourceImageWidth>
+ <Track1:SourceImageHeight>240</Track1:SourceImageHeight>
+ <Track1:XResolution>72</Track1:XResolution>
+ <Track1:YResolution>72</Track1:YResolution>
+ <Track1:BitDepth>24</Track1:BitDepth>
+ <Track1:BufferSize>4944</Track1:BufferSize>
+ <Track1:MaxBitrate>112032</Track1:MaxBitrate>
+ <Track1:AverageBitrate>82120</Track1:AverageBitrate>
+ <Track1:VideoFrameRate>30</Track1:VideoFrameRate>
+ <Track2:TrackHeaderVersion>0</Track2:TrackHeaderVersion>
+ <Track2:TrackCreateDate>2010:11:17 02:26:48</Track2:TrackCreateDate>
+ <Track2:TrackModifyDate>2010:11:17 02:26:48</Track2:TrackModifyDate>
+ <Track2:TrackID>2</Track2:TrackID>
+ <Track2:TrackDuration>3.06 s</Track2:TrackDuration>
+ <Track2:TrackLayer>0</Track2:TrackLayer>
+ <Track2:TrackVolume>100.00%</Track2:TrackVolume>
+ <Track2:MatrixStructure>1 0 0 0 1 0 0 0 1</Track2:MatrixStructure>
+ <Track2:MediaHeaderVersion>0</Track2:MediaHeaderVersion>
+ <Track2:MediaCreateDate>2010:11:17 02:26:48</Track2:MediaCreateDate>
+ <Track2:MediaModifyDate>2010:11:17 02:26:48</Track2:MediaModifyDate>
+ <Track2:MediaTimeScale>44100</Track2:MediaTimeScale>
+ <Track2:MediaDuration>3.07 s</Track2:MediaDuration>
+ <Track2:MediaLanguageCode>und</Track2:MediaLanguageCode>
+ <Track2:HandlerType>Audio Track</Track2:HandlerType>
+ <Track2:HandlerDescription>GPAC ISO Audio Handler</Track2:HandlerDescription>
+ <Track2:Balance>0</Track2:Balance>
+ <Track2:AudioFormat>mp4a</Track2:AudioFormat>
+ <Track2:AudioChannels>1</Track2:AudioChannels>
+ <Track2:AudioBitsPerSample>16</Track2:AudioBitsPerSample>
+ <Track2:AudioSampleRate>44100</Track2:AudioSampleRate>
+ <Composite:AvgBitrate>133 kbps</Composite:AvgBitrate>
+ <Composite:ImageSize>320x240</Composite:ImageSize>
+ <Composite:Megapixels>0.077</Composite:Megapixels>
+ <Composite:Rotation>0</Composite:Rotation>
+</rdf:Description>
+</rdf:RDF>
+              </premis:objectCharacteristicsExtension>
+              <premis:objectCharacteristicsExtension>
+                <MediaInfo xmlns="https://mediaarea.net/mediainfo" xsi:schemaLocation="https://mediaarea.net/mediainfo https://mediaarea.net/mediainfo/mediainfo_2_0.xsd" version="2.0">
+<creatingLibrary version="18.05" url="https://mediaarea.net/MediaInfo">MediaInfoLib</creatingLibrary>
+<media ref="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/A4.mp4">
+<track type="General">
+<VideoCount>1</VideoCount>
+<AudioCount>1</AudioCount>
+<FileExtension>mp4</FileExtension>
+<Format>MPEG-4</Format>
+<Format_Profile>Base Media</Format_Profile>
+<CodecID>isom</CodecID>
+<FileSize>53409</FileSize>
+<Duration>3.065</Duration>
+<OverallBitRate_Mode>VBR</OverallBitRate_Mode>
+<OverallBitRate>139404</OverallBitRate>
+<FrameRate>30.000</FrameRate>
+<FrameCount>90</FrameCount>
+<StreamSize>2264</StreamSize>
+<HeaderSize>2160</HeaderSize>
+<DataSize>51153</DataSize>
+<FooterSize>96</FooterSize>
+<IsStreamable>Yes</IsStreamable>
+<Encoded_Date>UTC 2010-11-17 02:26:48</Encoded_Date>
+<Tagged_Date>UTC 2010-11-17 02:26:48</Tagged_Date>
+<File_Modified_Date>UTC 2023-11-21 08:51:21</File_Modified_Date>
+<File_Modified_Date_Local>2023-11-21 08:51:21</File_Modified_Date_Local>
+</track>
+<track type="Video">
+<StreamOrder>0</StreamOrder>
+<ID>1</ID>
+<Format>AVC</Format>
+<Format_Profile>Baseline</Format_Profile>
+<Format_Level>1.3</Format_Level>
+<Format_Settings_CABAC>No</Format_Settings_CABAC>
+<Format_Settings_RefFrames>3</Format_Settings_RefFrames>
+<CodecID>avc1</CodecID>
+<Duration>3.000</Duration>
+<BitRate>82123</BitRate>
+<BitRate_Maximum>112032</BitRate_Maximum>
+<Width>320</Width>
+<Height>240</Height>
+<Sampled_Width>320</Sampled_Width>
+<Sampled_Height>240</Sampled_Height>
+<PixelAspectRatio>1.000</PixelAspectRatio>
+<DisplayAspectRatio>1.333</DisplayAspectRatio>
+<Rotation>0.000</Rotation>
+<FrameRate_Mode>CFR</FrameRate_Mode>
+<FrameRate>30.000</FrameRate>
+<FrameCount>90</FrameCount>
+<ColorSpace>YUV</ColorSpace>
+<ChromaSubsampling>4:2:0</ChromaSubsampling>
+<BitDepth>8</BitDepth>
+<ScanType>Progressive</ScanType>
+<StreamSize>30796</StreamSize>
+<Encoded_Library>x264 - core 104 r1703 cd21d05</Encoded_Library>
+<Encoded_Library_Name>x264</Encoded_Library_Name>
+<Encoded_Library_Version>core 104 r1703 cd21d05</Encoded_Library_Version>
+<Encoded_Library_Settings>cabac=0 / ref=3 / deblock=1:0:0 / analyse=0x1:0x111 / me=hex / subme=7 / psy=1 / psy_rd=1.00:0.00 / mixed_ref=1 / me_range=16 / chroma_me=1 / trellis=1 / 8x8dct=0 / cqm=0 / deadzone=21,11 / fast_pskip=1 / chroma_qp_offset=-2 / threads=6 / sliced_threads=0 / nr=0 / decimate=1 / interlaced=0 / constrained_intra=0 / bframes=0 / weightp=0 / keyint=250 / keyint_min=25 / scenecut=40 / intra_refresh=0 / rc_lookahead=40 / rc=crf / mbtree=1 / crf=23.0 / qcomp=0.60 / qpmin=10 / qpmax=51 / qpstep=4 / ip_ratio=1.40 / aq=1:1.00</Encoded_Library_Settings>
+<Encoded_Date>UTC 2010-11-17 02:26:48</Encoded_Date>
+<Tagged_Date>UTC 2010-11-17 02:26:48</Tagged_Date>
+</track>
+<track type="Audio">
+<StreamOrder>1</StreamOrder>
+<ID>2</ID>
+<Format>AAC</Format>
+<Format_Profile>LC</Format_Profile>
+<Format_Settings_SBR>No (Explicit)</Format_Settings_SBR>
+<CodecID>mp4a-40-2</CodecID>
+<Duration>3.065</Duration>
+<BitRate_Mode>VBR</BitRate_Mode>
+<BitRate>53112</BitRate>
+<BitRate_Maximum>54624</BitRate_Maximum>
+<Channels>1</Channels>
+<ChannelPositions>Front: C</ChannelPositions>
+<ChannelLayout>C</ChannelLayout>
+<SamplesPerFrame>1024</SamplesPerFrame>
+<SamplingRate>44100</SamplingRate>
+<SamplingCount>135166</SamplingCount>
+<FrameRate>43.066</FrameRate>
+<FrameCount>132</FrameCount>
+<Compression_Mode>Lossy</Compression_Mode>
+<StreamSize>20349</StreamSize>
+<StreamSize_Proportion>0.38100</StreamSize_Proportion>
+<Encoded_Date>UTC 2010-11-17 02:26:48</Encoded_Date>
+<Tagged_Date>UTC 2010-11-17 02:26:48</Tagged_Date>
+</track>
+</media>
+</MediaInfo>
+              </premis:objectCharacteristicsExtension>
+            </premis:objectCharacteristics>
+            <premis:originalName>%transferDirectory%objects/cuid39675/A4.mp4</premis:originalName>
+          </premis:object>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:digiprovMD ID="digiprovMD_542719" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>90b0c56d-5c04-4b22-893a-50bc54465a45</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>ingestion</premis:eventType>
+            <premis:eventDateTime>2023-11-21 14:26:19.227995+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.13.2</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>NNYU</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542720" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>20d711f6-f1f2-4262-8a54-b5ba1c505dc2</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>message digest calculation</premis:eventType>
+            <premis:eventDateTime>2023-11-21 14:26:19.470655+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="python"; module="hashlib.sha256()"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>d1292c9ce2fc379a524a7604ac54f1bd00dec0c4a82cca52b5a028e6038b4315</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.13.2</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>NNYU</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542721" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>0e281275-ac51-4552-adb5-7ad373fa29e7</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>format identification</premis:eventType>
+            <premis:eventDateTime>2023-11-21 14:26:24.537237+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="Siegfried"; version="1.8.0"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Positive</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>fmt/199</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.13.2</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>NNYU</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542722" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>Archivematica-1.13.2</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>Archivematica</premis:agentName>
+            <premis:agentType>software</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542723" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>repository code</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>NNYU</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>New York University Libraries</premis:agentName>
+            <premis:agentType>organization</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542724" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>1</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>username="archivematica", first_name="Donald", last_name="Mennerich"</premis:agentName>
+            <premis:agentType>Archivematica user</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+  </mets:amdSec>
+  <mets:amdSec ID="amdSec_77435">
+    <mets:techMD ID="techMD_77435" CREATED="2023-11-21T14:26:29" STATUS="current">
+      <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+        <mets:xmlData>
+          <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0" xsi:type="premis:file">
+            <premis:objectIdentifier>
+              <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+              <premis:objectIdentifierValue>f1e43f93-bb54-43df-b96c-f57e852aa854</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+              <premis:compositionLevel>0</premis:compositionLevel>
+              <premis:fixity>
+                <premis:messageDigestAlgorithm>SHA-256</premis:messageDigestAlgorithm>
+                <premis:messageDigest>d0b1b799f1cb8131a96e4fe629b78b117af9523b36bd14c18365144eeb7100ef</premis:messageDigest>
+              </premis:fixity>
+              <premis:size>80388</premis:size>
+              <premis:format>
+                <premis:formatDesignation>
+                  <premis:formatName>Unknown</premis:formatName>
+                </premis:formatDesignation>
+              </premis:format>
+              <premis:creatingApplication>
+                <premis:dateCreatedByApplication>2023-11-21T08:51:21Z</premis:dateCreatedByApplication>
+              </premis:creatingApplication>
+              <premis:objectCharacteristicsExtension>
+                <fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="1.1.0" timestamp="11/21/23 9:26 AM">
+  <identification status="PARTIAL">
+    <identity format="ISO Media" mimetype="application/octet-stream" toolname="FITS" toolversion="1.1.0">
+      <tool toolname="file utility" toolversion="5.32"/>
+    </identity>
+  </identification>
+  <fileinfo>
+    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/dash_dashinit.mp4</filepath>
+    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">dash_dashinit.mp4</filename>
+    <size toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">80388</size>
+    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1700556681000</fslastmodified>
+  </fileinfo>
+  <filestatus/>
+  <metadata/>
+  <toolOutput>
+    <tool name="file utility" version="5.32">
+      <fileUtilityOutput xmlns="">
+        <rawOutput>ISO Media
+application/octet-stream; charset=binary</rawOutput>
+        <mimetype>application/octet-stream</mimetype>
+        <format>ISO Media</format>
+      </fileUtilityOutput>
+    </tool>
+    <tool name="OIS File Information" version="0.2">
+      <fits xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd">
+        <fileinfo>
+          <filepath>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/dash_dashinit.mp4</filepath>
+          <filename>dash_dashinit.mp4</filename>
+          <size>80388</size>
+          <fslastmodified>1700556681000</fslastmodified>
+        </fileinfo>
+      </fits>
+    </tool>
+    <tool name="ffident" version="0.2">
+      <ffidentOutput xmlns="">
+        <shortName/>
+        <longName>Unknown Binary</longName>
+        <group/>
+        <mimetypes>
+          <mimetype>application/octet-stream</mimetype>
+        </mimetypes>
+        <fileExtensions/>
+      </ffidentOutput>
+    </tool>
+    <tool name="Tika" version="1.10">
+      <metadata xmlns="">
+        <field name="date">
+          <value>2014-11-25T01:05:20Z</value>
+        </field>
+        <field name="X-Parsed-By">
+          <value>org.apache.tika.parser.DefaultParser</value>
+          <value>org.apache.tika.parser.mp4.MP4Parser</value>
+        </field>
+        <field name="xmp:CreatorTool">
+          <value>Lavf56.1.0</value>
+        </field>
+        <field name="meta:creation-date">
+          <value>1904-01-01T00:00:00Z</value>
+        </field>
+        <field name="Creation-Date">
+          <value>1904-01-01T00:00:00Z</value>
+        </field>
+        <field name="tiff:ImageLength">
+          <value>240</value>
+        </field>
+        <field name="dcterms:created">
+          <value>1904-01-01T00:00:00Z</value>
+        </field>
+        <field name="dcterms:modified">
+          <value>2014-11-25T01:05:20Z</value>
+        </field>
+        <field name="Last-Modified">
+          <value>2014-11-25T01:05:20Z</value>
+        </field>
+        <field name="Last-Save-Date">
+          <value>2014-11-25T01:05:20Z</value>
+        </field>
+        <field name="xmpDM:audioSampleRate">
+          <value>1000</value>
+        </field>
+        <field name="meta:save-date">
+          <value>2014-11-25T01:05:20Z</value>
+        </field>
+        <field name="modified">
+          <value>2014-11-25T01:05:20Z</value>
+        </field>
+        <field name="tiff:ImageWidth">
+          <value>320</value>
+        </field>
+        <field name="xmpDM:duration">
+          <value>0.0</value>
+        </field>
+        <field name="Content-Type">
+          <value>application/mp4</value>
+        </field>
+      </metadata>
+    </tool>
+  </toolOutput>
+</fits>
+              </premis:objectCharacteristicsExtension>
+            </premis:objectCharacteristics>
+            <premis:originalName>%transferDirectory%objects/cuid39675/dash_dashinit.mp4</premis:originalName>
+          </premis:object>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:digiprovMD ID="digiprovMD_542725" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>4cad4e2e-b073-4176-b1eb-a18a636e040a</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>ingestion</premis:eventType>
+            <premis:eventDateTime>2023-11-21 14:26:19.236732+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.13.2</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>NNYU</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542726" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>8139b611-7062-42c4-9cf6-1dfd9e803bb1</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>message digest calculation</premis:eventType>
+            <premis:eventDateTime>2023-11-21 14:26:19.477176+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="python"; module="hashlib.sha256()"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>d0b1b799f1cb8131a96e4fe629b78b117af9523b36bd14c18365144eeb7100ef</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.13.2</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>NNYU</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542727" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>Archivematica-1.13.2</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>Archivematica</premis:agentName>
+            <premis:agentType>software</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542728" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>repository code</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>NNYU</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>New York University Libraries</premis:agentName>
+            <premis:agentType>organization</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_542729" CREATED="2023-11-21T14:26:29">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>1</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>username="archivematica", first_name="Donald", last_name="Mennerich"</premis:agentName>
+            <premis:agentType>Archivematica user</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+  </mets:amdSec>
+  <mets:fileSec>
+    <mets:fileGrp USE="original">
+      <mets:file ID="file-db381d24-1da9-4251-94b6-ee0416100bd3" GROUPID="Group-db381d24-1da9-4251-94b6-ee0416100bd3" ADMID="amdSec_77434" CHECKSUM="d1292c9ce2fc379a524a7604ac54f1bd00dec0c4a82cca52b5a028e6038b4315" CHECKSUMTYPE="SHA-256">
+        <mets:FLocat xlink:href="objects/cuid39675/A4.mp4" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+      </mets:file>
+      <mets:file ID="file-f1e43f93-bb54-43df-b96c-f57e852aa854" GROUPID="Group-f1e43f93-bb54-43df-b96c-f57e852aa854" ADMID="amdSec_77435" CHECKSUM="d0b1b799f1cb8131a96e4fe629b78b117af9523b36bd14c18365144eeb7100ef" CHECKSUMTYPE="SHA-256">
+        <mets:FLocat xlink:href="objects/cuid39675/dash_dashinit.mp4" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+      </mets:file>
+    </mets:fileGrp>
+  </mets:fileSec>
+  <mets:structMap TYPE="physical" ID="structMap_1" LABEL="Archivematica default">
+    <mets:div TYPE="Directory" LABEL="fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5">
+      <mets:div TYPE="Directory" LABEL="objects">
+        <mets:div TYPE="Directory" LABEL="cuid39675">
+          <mets:div TYPE="Item" LABEL="A4.mp4">
+            <mets:fptr FILEID="file-db381d24-1da9-4251-94b6-ee0416100bd3"/>
+          </mets:div>
+          <mets:div TYPE="Item" LABEL="dash_dashinit.mp4">
+            <mets:fptr FILEID="file-f1e43f93-bb54-43df-b96c-f57e852aa854"/>
+          </mets:div>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+  <mets:structMap TYPE="logical" ID="structMap_2" LABEL="Normative Directory Structure">
+    <mets:div TYPE="Directory" LABEL="fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5">
+      <mets:div TYPE="Directory" LABEL="logs">
+        <mets:div TYPE="Directory" LABEL="fileMeta"/>
+      </mets:div>
+      <mets:div TYPE="Directory" LABEL="metadata">
+        <mets:div TYPE="Directory" LABEL="submissionDocumentation"/>
+      </mets:div>
+      <mets:div TYPE="Directory" LABEL="objects">
+        <mets:div TYPE="Directory" LABEL="cuid39675">
+          <mets:div TYPE="Item" LABEL="A4.mp4"/>
+          <mets:div TYPE="Item" LABEL="dash_dashinit.mp4"/>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+</mets:mets>

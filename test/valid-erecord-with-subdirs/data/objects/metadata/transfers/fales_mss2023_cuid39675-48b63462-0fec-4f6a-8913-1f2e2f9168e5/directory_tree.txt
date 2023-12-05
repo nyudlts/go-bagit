@@ -1,0 +1,6 @@
+/var/archivematica/sharedDirectory/currentlyProcessing/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/
+└── cuid39675
+    ├── A4.mp4
+    └── dash_dashinit.mp4
+
+1 directory, 2 files

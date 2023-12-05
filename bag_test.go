@@ -60,7 +60,7 @@ func TestValidateBag(t *testing.T) {
 }
 
 func TestGetFilesInBag(t *testing.T) {
-	t.Run("Test FindFilesInBag()", func(t *testing.T) {
+	t.Run("Test GetFilesInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-with-subdirs")
 
 		want := []string{
@@ -75,11 +75,11 @@ func TestGetFilesInBag(t *testing.T) {
 
 		got, err := GetFilesInBag(bagRoot)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 
 		if len(want) != len(got) {
-			t.Error("length of returned slice does not match expectations")
+			t.Fatal("length of returned slice does not match expectations")
 		}
 
 		slices.Sort(want)
@@ -95,6 +95,52 @@ func TestGetFilesInBag(t *testing.T) {
 		}
 		if !status {
 			t.Error(msg)
+		}
+	})
+}
+
+func TestGetDirsInBag(t *testing.T) {
+	t.Run("Test GetDirsInBag()", func(t *testing.T) {
+		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
+
+		want := []string{
+			"test/valid-erecord-with-subdirs",
+			"test/valid-erecord-with-subdirs/data",
+			"test/valid-erecord-with-subdirs/data/logs",
+			"test/valid-erecord-with-subdirs/data/logs/transfers",
+			"test/valid-erecord-with-subdirs/data/logs/transfers/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5",
+			"test/valid-erecord-with-subdirs/data/logs/transfers/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/logs",
+			"test/valid-erecord-with-subdirs/data/objects",
+			"test/valid-erecord-with-subdirs/data/objects/cuid39675",
+			"test/valid-erecord-with-subdirs/data/objects/metadata",
+			"test/valid-erecord-with-subdirs/data/objects/metadata/transfers",
+			"test/valid-erecord-with-subdirs/data/objects/metadata/transfers/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5",
+			"test/valid-erecord-with-subdirs/data/objects/submissionDocumentation",
+			"test/valid-erecord-with-subdirs/data/objects/submissionDocumentation/transfer-fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5",
+		}
+
+		got, err := GetDirsInBag(bagRoot)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if len(want) != len(got) {
+			t.Fatal("length of returned slice does not match expectations")
+		}
+
+		slices.Sort(want)
+		slices.Sort(got)
+
+		status := true
+		msg := ""
+		for i := 0; i < len(want); i++ {
+			if want[i] != got[i] {
+				status = false
+				msg = msg + "\n" + fmt.Sprintf("%v != %v", want[i], got[i])
+			}
+		}
+		if !status {
+			t.Fatal(msg)
 		}
 	})
 }
