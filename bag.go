@@ -302,6 +302,22 @@ func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
 	return "", fmt.Errorf("Could not locate file pattern in bag")
 }
 
+func FindFilesInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error) {
+	var results []string
+
+	bagFiles, err := GetFilesInBag(bagLocation)
+	if err != nil {
+		return results, err
+	}
+
+	for _, p := range bagFiles {
+		if matcher.MatchString(p) {
+			results = append(results, p)
+		}
+	}
+	return results, nil
+}
+
 func GetDirsInBag(bagLocation string) ([]string, error) {
 	bagDirs := []string{}
 	err := filepath.Walk(bagLocation, func(path string, info os.FileInfo, err error) error {
