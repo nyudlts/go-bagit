@@ -27,7 +27,7 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 		return err
 	}
 
-	if fast == true {
+	if fast {
 		log.Printf("- INFO - %s valid according to Payload Oxum", bagLocation)
 		return nil
 	}
@@ -278,7 +278,7 @@ func GetFilesInBag(bagLocation string) ([]string, error) {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() != true {
+		if !info.IsDir() {
 			bagFiles = append(bagFiles, path)
 		}
 		return nil
@@ -317,4 +317,17 @@ func GetDirsInBag(bagLocation string) ([]string, error) {
 		return bagDirs, err
 	}
 	return bagDirs, nil
+}
+
+func FindDirInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
+	bagFiles, err := GetDirsInBag(bagLocation)
+	if err != nil {
+		return "", err
+	}
+	for _, p := range bagFiles {
+		if matcher.MatchString(p) {
+			return p, nil
+		}
+	}
+	return "", fmt.Errorf("Could not locate directory pattern in bag")
 }

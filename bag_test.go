@@ -162,3 +162,21 @@ func TestFindFileInBag(t *testing.T) {
 		}
 	})
 }
+
+func TestFindDirInBag(t *testing.T) {
+	t.Run("Test FindDirInBag()", func(t *testing.T) {
+		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
+
+		want := "test/valid-erecord-with-subdirs/data/objects/cuid39675"
+		wantPtn := regexp.MustCompile("objects/cuid39675$")
+
+		got, err := FindDirInBag(bagRoot, wantPtn)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if want != got {
+			t.Errorf("\n%v !=\n%v", want, got)
+		}
+	})
+}
