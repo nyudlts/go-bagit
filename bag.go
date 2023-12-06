@@ -13,6 +13,13 @@ import (
 var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
+type getFilesOrDirsParams struct {
+	Location    string
+	Matcher     *regexp.Regexp
+	FindFiles   bool
+	ReturnFirst bool
+}
+
 func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	errs := []error{}
 	storedOxum, err := GetOxum(bagLocation)
@@ -273,93 +280,91 @@ func directoryExists(inputDir string) error {
 }
 
 func GetFilesInBag(bagLocation string) ([]string, error) {
-	bagFiles := []string{}
-	err := filepath.Walk(bagLocation, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if !info.IsDir() {
-			bagFiles = append(bagFiles, path)
-		}
-		return nil
-	})
-	if err != nil {
-		return bagFiles, err
-	}
-	return bagFiles, nil
+	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, regexp.MustCompile(`.*`), true, false})
 }
 
 func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
-	bagFiles, err := GetFilesInBag(bagLocation)
+	results, err := getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, true, true})
 	if err != nil {
 		return "", err
 	}
-	for _, p := range bagFiles {
-		if matcher.MatchString(p) {
-			return p, nil
-		}
+	if len(results) == 0 {
+		return "", fmt.Errorf("Could not locate file pattern in bag")
 	}
-	return "", fmt.Errorf("Could not locate file pattern in bag")
+	return results[0], nil
 }
 
 func FindFilesInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error) {
-	var results []string
-
-	bagFiles, err := GetFilesInBag(bagLocation)
-	if err != nil {
-		return results, err
-	}
-
-	for _, p := range bagFiles {
-		if matcher.MatchString(p) {
-			results = append(results, p)
-		}
-	}
-	return results, nil
+	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, true, false})
 }
 
 func GetDirsInBag(bagLocation string) ([]string, error) {
-	bagDirs := []string{}
-	err := filepath.Walk(bagLocation, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if info.IsDir() {
-			bagDirs = append(bagDirs, path)
-		}
-		return nil
-	})
-	if err != nil {
-		return bagDirs, err
-	}
-	return bagDirs, nil
+	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, regexp.MustCompile(`.*`), false, false})
 }
 
 func FindDirInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
-	bagDirs, err := GetDirsInBag(bagLocation)
+	results, err := getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, false, true})
 	if err != nil {
 		return "", err
 	}
-	for _, p := range bagDirs {
-		if matcher.MatchString(p) {
-			return p, nil
-		}
+	if len(results) == 0 {
+		return "", fmt.Errorf("Could not locate directory pattern in bag")
 	}
-	return "", fmt.Errorf("Could not locate directory pattern in bag")
+	return results[0], nil
 }
 
 func FindDirsInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error) {
-	var results []string
+	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, false, false})
+}
 
-	bagDirs, err := GetDirsInBag(bagLocation)
+/* func FindDirsInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error) {
+	return getFilesOrDirsInBag(bagLocation, matcher, false, false)
+}
+*/
+// getFilesOrDirsInBag returns a slice of strings of matching files or directories.
+// What is returned is controlled by the findFiles boolean.
+// findFiles = true   --> return matching files
+// findFiles = false  --> return matching directories
+//
+// How many matches are returned is determined by the returnFirst boolean.
+// returnFirst = true  --> halts search and returns with first match
+// returnFirst = false --> returns all matching files or directories
+func getFilesOrDirsInBag(params getFilesOrDirsParams) ([]string, error) {
+	results := []string{}
+
+	bagLocation := params.Location
+	matcher := params.Matcher
+	findFiles := params.FindFiles
+	returnFirst := params.ReturnFirst
+
+	err := filepath.Walk(bagLocation,
+		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+
+			// if looking for files, but this is a directory, move on...
+			if findFiles && info.IsDir() {
+				return nil
+			}
+
+			// if looking for directories, but this is NOT a directory, move on...
+			if !findFiles && !info.IsDir() {
+				return nil
+			}
+
+			// OK, we found something that we might be looking for...
+			if matcher.MatchString(path) {
+				results = append(results, path)
+				if returnFirst {
+					return filepath.SkipAll
+				}
+			}
+			return nil
+		})
+
 	if err != nil {
-		return results, err
-	}
-
-	for _, p := range bagDirs {
-		if matcher.MatchString(p) {
-			results = append(results, p)
-		}
+		return nil, err
 	}
 	return results, nil
 }
