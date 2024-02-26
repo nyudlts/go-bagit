@@ -89,21 +89,21 @@ type StandardTagSet struct {
 
 func GetStandardTags() StandardTagSet {
 	standardTags := StandardTagSet{}
-	standardTags.BagSoftwareAgent = "Bag_Software_Agent"
-	standardTags.SourceOrganization = "Source_Organization"
-	standardTags.OrganizationAddress = "Organization_Address"
-	standardTags.ContactName = "Contact_Name"
-	standardTags.ContactPhone = "Contact_Phone"
-	standardTags.ContactEmail = "Contact_email"
-	standardTags.ExternalDescription = "External_Description"
-	standardTags.ExternalIdentifier = "External_Identifier"
-	standardTags.BagSize = "Bag_Size"
-	standardTags.BaggingDate = "Bagging_Date"
-	standardTags.PayloadOxum = "Payload_Oxum"
-	standardTags.BagCount = "Bag_Count"
-	standardTags.BagGroupIdentifier = "Bag_Group_Identifier"
-	standardTags.InternalSenderIdentifier = "Internal_Sender_Identifier"
-	standardTags.InternalSenderDescription = "Internal_Sender_Description"
+	standardTags.BagSoftwareAgent = "Bag-Software-Agent"
+	standardTags.SourceOrganization = "Source-Organization"
+	standardTags.OrganizationAddress = "Organization-Address"
+	standardTags.ContactName = "Contact-Name"
+	standardTags.ContactPhone = "Contact-Phone"
+	standardTags.ContactEmail = "Contact-email"
+	standardTags.ExternalDescription = "External-Description"
+	standardTags.ExternalIdentifier = "External-Identifier"
+	standardTags.BagSize = "Bag-Size"
+	standardTags.BaggingDate = "Bagging-Date"
+	standardTags.PayloadOxum = "Payload-Oxum"
+	standardTags.BagCount = "Bag-Count"
+	standardTags.BagGroupIdentifier = "Bag-Group-Identifier"
+	standardTags.InternalSenderIdentifier = "Internal-Sender-Identifier"
+	standardTags.InternalSenderDescription = "Internal-Sender-Description"
 	return standardTags
 }
 
