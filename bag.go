@@ -317,10 +317,6 @@ func FindDirsInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error)
 	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, false, false})
 }
 
-/* func FindDirsInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error) {
-	return getFilesOrDirsInBag(bagLocation, matcher, false, false)
-}
-*/
 // getFilesOrDirsInBag returns a slice of strings of matching files or directories.
 // What is returned is controlled by the findFiles boolean.
 // findFiles = true   --> return matching files
