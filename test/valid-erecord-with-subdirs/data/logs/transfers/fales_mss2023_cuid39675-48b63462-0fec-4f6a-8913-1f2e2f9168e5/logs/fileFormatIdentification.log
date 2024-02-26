@@ -1,0 +1,12 @@
+IDCommand: Identify using Siegfried 1.8.0
+IDCommand UUID: e24cf2d5-51ac-4bed-9ff6-cb691d895ade
+IDTool: Siegfried
+IDTool UUID: 454df69d-5cc0-49fc-93e4-6fbb6ac659e7
+File: (db381d24-1da9-4251-94b6-ee0416100bd3) /var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/selectFormatIDToolTransfer/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/A4.mp4
+Command output: fmt/199
+/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/selectFormatIDToolTransfer/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/A4.mp4 identified as a MPEG-4 Video
+IDCommand: Identify using Siegfried 1.8.0
+IDCommand UUID: e24cf2d5-51ac-4bed-9ff6-cb691d895ade
+IDTool: Siegfried
+IDTool UUID: 454df69d-5cc0-49fc-93e4-6fbb6ac659e7
+File: (f1e43f93-bb54-43df-b96c-f57e852aa854) /var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/selectFormatIDToolTransfer/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/objects/cuid39675/dash_dashinit.mp4
