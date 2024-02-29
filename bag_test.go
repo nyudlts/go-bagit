@@ -65,6 +65,7 @@ func TestValidateBag(t *testing.T) {
 func TestGetFilesInBag(t *testing.T) {
 	t.Run("Test GetFilesInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-with-subdirs")
+		bag, err := GetExistingBag(bagRoot)
 
 		want := []string{
 			"test/valid-with-subdirs/bagit.txt",
@@ -76,7 +77,7 @@ func TestGetFilesInBag(t *testing.T) {
 			"test/valid-with-subdirs/data/logs/output1.log",
 		}
 
-		got, err := GetFilesInBag(bagRoot)
+		got, err := bag.GetFilesInBag()
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -105,7 +106,10 @@ func TestGetFilesInBag(t *testing.T) {
 func TestGetDirsInBag(t *testing.T) {
 	t.Run("Test GetDirsInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
-
+		bag, err := GetExistingBag(bagRoot)
+		if err != nil {
+			t.Error(err)
+		}
 		want := []string{
 			"test/valid-erecord-with-subdirs",
 			"test/valid-erecord-with-subdirs/data",
@@ -122,7 +126,7 @@ func TestGetDirsInBag(t *testing.T) {
 			"test/valid-erecord-with-subdirs/data/objects/submissionDocumentation/transfer-fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5",
 		}
 
-		got, err := GetDirsInBag(bagRoot)
+		got, err := bag.GetDirsInBag()
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -151,11 +155,14 @@ func TestGetDirsInBag(t *testing.T) {
 func TestFindFileInBag(t *testing.T) {
 	t.Run("Test FindFileInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-with-subdirs")
-
+		bag, err := GetExistingBag(bagRoot)
+		if err != nil {
+			t.Error(err)
+		}
 		want := "test/valid-with-subdirs/data/logs/output2.log"
 		wantPtn := regexp.MustCompile("output2.log$")
 
-		got, err := FindFileInBag(bagRoot, wantPtn)
+		got, err := bag.FindFileInBag(wantPtn)
 		if err != nil {
 			t.Error(err)
 		}
@@ -169,14 +176,17 @@ func TestFindFileInBag(t *testing.T) {
 func TestFindFilesInBag(t *testing.T) {
 	t.Run("Test FindFilesInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
-
+		bag, err := GetExistingBag(bagRoot)
+		if err != nil {
+			t.Error(err)
+		}
 		want := []string{
 			"test/valid-erecord-with-subdirs/fales_mss2023_cuid39675_aspace_wo.tsv",
 			"test/valid-erecord-with-subdirs/data/objects/metadata/transfers/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/fales_mss2023_cuid39675_aspace_wo.tsv",
 		}
 		wantPtn := regexp.MustCompile("_aspace_wo.tsv$")
 
-		got, err := FindFilesInBag(bagRoot, wantPtn)
+		got, err := bag.FindFilesInBag(wantPtn)
 		if err != nil {
 			t.Error(err)
 		}
@@ -206,11 +216,14 @@ func TestFindFilesInBag(t *testing.T) {
 func TestFindDirInBag(t *testing.T) {
 	t.Run("Test FindDirInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
-
+		bag, err := GetExistingBag(bagRoot)
+		if err != nil {
+			t.Error(err)
+		}
 		want := "test/valid-erecord-with-subdirs/data/objects/cuid39675"
 		wantPtn := regexp.MustCompile("objects/cuid39675$")
 
-		got, err := FindDirInBag(bagRoot, wantPtn)
+		got, err := bag.FindDirInBag(wantPtn)
 		if err != nil {
 			t.Error(err)
 		}

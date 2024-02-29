@@ -15,7 +15,7 @@ type Bag struct {
 	Path      string
 	Name      string
 	AbsPath   string
-	Payload   interface{}
+	Payload   []*os.FileInfo
 	TagSets   []TagSet
 	Manifests []Manifest
 }
@@ -286,7 +286,7 @@ func (b Bag) AddFileToBagRoot(file string) error {
 	targetFile.Close()
 
 	//locate the tagmanifest
-	tagmanifest, err := FindFileInBag(b.Path, regexp.MustCompile("tagmanifest"))
+	tagmanifest, err := b.FindFileInBag(regexp.MustCompile("tagmanifest"))
 	if err != nil {
 		return err
 	}
@@ -299,12 +299,12 @@ func (b Bag) AddFileToBagRoot(file string) error {
 	return nil
 }
 
-func GetFilesInBag(bagLocation string) ([]string, error) {
-	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, regexp.MustCompile(`.*`), true, false})
+func (b Bag) GetFilesInBag() ([]string, error) {
+	return getFilesOrDirsInBag(getFilesOrDirsParams{b.Path, regexp.MustCompile(`.*`), true, false})
 }
 
-func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
-	results, err := getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, true, true})
+func (b Bag) FindFileInBag(matcher *regexp.Regexp) (string, error) {
+	results, err := getFilesOrDirsInBag(getFilesOrDirsParams{b.Path, matcher, true, true})
 	if err != nil {
 		return "", err
 	}
@@ -314,16 +314,16 @@ func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
 	return results[0], nil
 }
 
-func FindFilesInBag(bagLocation string, matcher *regexp.Regexp) ([]string, error) {
-	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, true, false})
+func (b Bag) FindFilesInBag(matcher *regexp.Regexp) ([]string, error) {
+	return getFilesOrDirsInBag(getFilesOrDirsParams{b.Path, matcher, true, false})
 }
 
-func GetDirsInBag(bagLocation string) ([]string, error) {
-	return getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, regexp.MustCompile(`.*`), false, false})
+func (b Bag) GetDirsInBag() ([]string, error) {
+	return getFilesOrDirsInBag(getFilesOrDirsParams{b.Path, regexp.MustCompile(`.*`), false, false})
 }
 
-func FindDirInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
-	results, err := getFilesOrDirsInBag(getFilesOrDirsParams{bagLocation, matcher, false, true})
+func (b Bag) FindDirInBag(matcher *regexp.Regexp) (string, error) {
+	results, err := getFilesOrDirsInBag(getFilesOrDirsParams{b.Path, matcher, false, true})
 	if err != nil {
 		return "", err
 	}
