@@ -8,10 +8,43 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
-var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
-var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
+type Bag struct {
+	Path      string
+	Payload   interface{}
+	TagSets   []TagSet
+	Manifests []Manifest
+}
+
+func (b Bag) GetAbsolutePath() (string, error) {
+	abs, err := filepath.Abs(b.Path)
+	if err != nil {
+		return abs, err
+	}
+	return abs, nil
+}
+
+func (b Bag) String() string {
+	absLoc, err := b.GetAbsolutePath()
+	if err != nil {
+		panic(err)
+	}
+	pathSplit := strings.Split(absLoc, string(os.PathSeparator))
+	bagName := pathSplit[len(pathSplit)-1]
+	bagPath := strings.Join(pathSplit[:len(pathSplit)-1], string(os.PathSeparator))
+	return fmt.Sprintf("%s: %s\n", bagName, bagPath)
+}
+
+func GetExistingBag(path string) (Bag, error) {
+	bag := Bag{}
+	if err := directoryExists(path); err != nil {
+		return bag, err
+	}
+	bag.Path = path
+	return bag, nil
+}
 
 type getFilesOrDirsParams struct {
 	Location    string
@@ -289,7 +322,7 @@ func FindFileInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
 		return "", err
 	}
 	if len(results) == 0 {
-		return "", fmt.Errorf("Could not locate file pattern in bag")
+		return "", fmt.Errorf("could not locate file pattern in bag")
 	}
 	return results[0], nil
 }
@@ -308,7 +341,7 @@ func FindDirInBag(bagLocation string, matcher *regexp.Regexp) (string, error) {
 		return "", err
 	}
 	if len(results) == 0 {
-		return "", fmt.Errorf("Could not locate directory pattern in bag")
+		return "", fmt.Errorf("could not locate directory pattern in bag")
 	}
 	return results[0], nil
 }

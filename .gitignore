@@ -3,3 +3,4 @@ bin/
 test/bag-me
 test/add-me
 go-bagit*
+lab/*

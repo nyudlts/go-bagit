@@ -254,3 +254,14 @@ func TestFindDirsInBag(t *testing.T) {
 	})
 
 }
+
+// testing bag type
+func TestBagType(t *testing.T) {
+	t.Run("Test Opening Valid Bag", func(t *testing.T) {
+		bag, err := GetExistingBag("test/valid")
+		if err != nil {
+			t.Error(err)
+		}
+		t.Log(bag)
+	})
+}

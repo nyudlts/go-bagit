@@ -2,9 +2,13 @@ package go_bagit
 
 import (
 	"fmt"
+	"regexp"
 	"runtime/debug"
 	"time"
 )
+
+var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
+var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
 var currentTime = time.Now()
 
