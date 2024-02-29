@@ -13,9 +13,40 @@ import (
 
 type Bag struct {
 	Path      string
+	Name      string
+	AbsPath   string
 	Payload   interface{}
 	TagSets   []TagSet
 	Manifests []Manifest
+}
+
+func GetExistingBag(path string) (Bag, error) {
+	bag := Bag{}
+
+	//check directory exists
+	if err := directoryExists(path); err != nil {
+		return bag, err
+	}
+
+	//set path
+	bag.Path = path
+
+	//set absolute path
+	var err error
+	bag.AbsPath, err = getABS(bag.Path)
+	if err != nil {
+		return bag, err
+	}
+
+	//set name
+	pathSplit := strings.Split(bag.AbsPath, string(os.PathSeparator))
+	bag.Name = pathSplit[len(pathSplit)-1]
+
+	if err := bag.ValidateBag(false, false); err != nil {
+		return bag, err
+	}
+
+	return bag, nil
 }
 
 func (b Bag) GetAbsolutePath() (string, error) {
@@ -27,23 +58,9 @@ func (b Bag) GetAbsolutePath() (string, error) {
 }
 
 func (b Bag) String() string {
-	absLoc, err := b.GetAbsolutePath()
-	if err != nil {
-		panic(err)
-	}
-	pathSplit := strings.Split(absLoc, string(os.PathSeparator))
-	bagName := pathSplit[len(pathSplit)-1]
+	pathSplit := strings.Split(b.AbsPath, string(os.PathSeparator))
 	bagPath := strings.Join(pathSplit[:len(pathSplit)-1], string(os.PathSeparator))
-	return fmt.Sprintf("%s: %s\n", bagName, bagPath)
-}
-
-func GetExistingBag(path string) (Bag, error) {
-	bag := Bag{}
-	if err := directoryExists(path); err != nil {
-		return bag, err
-	}
-	bag.Path = path
-	return bag, nil
+	return fmt.Sprintf("%s: %s\n", b.Name, bagPath)
 }
 
 type getFilesOrDirsParams struct {
@@ -53,27 +70,27 @@ type getFilesOrDirsParams struct {
 	ReturnFirst bool
 }
 
-func ValidateBag(bagLocation string, fast bool, complete bool) error {
+func (b Bag) ValidateBag(fast bool, complete bool) error {
 	errs := []error{}
-	storedOxum, err := GetOxum(bagLocation)
+	storedOxum, err := GetOxum(b.Path)
 	if err != nil {
 		log.Printf("- ERROR - %s", err.Error())
 		return err
 	}
 
-	err = ValidateOxum(bagLocation, storedOxum)
+	err = ValidateOxum(b.Path, storedOxum)
 	if err != nil {
 		log.Printf("- ERROR - %s", err.Error())
 		return err
 	}
 
 	if fast {
-		log.Printf("- INFO - %s valid according to Payload Oxum", bagLocation)
+		log.Printf("- INFO - %s valid according to Payload Oxum", b.Path)
 		return nil
 	}
 
 	//validate ant manifest files
-	bagFiles, err := os.ReadDir(bagLocation)
+	bagFiles, err := os.ReadDir(b.Path)
 	if err != nil {
 		return err
 	}
@@ -81,17 +98,17 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	dataFiles := map[string]bool{}
 	for _, bagFile := range bagFiles {
 		if tagmanifestPtn.MatchString(bagFile.Name()) {
-			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
+			manifestLoc := filepath.Join(b.Path, bagFile.Name())
 			_, e := ValidateManifest(manifestLoc, complete)
 			if len(e) > 0 {
 				errs = append(errs, e...)
-				errorMsgs := gatherErrors(errs, bagLocation)
+				errorMsgs := gatherErrors(errs, b.Path)
 				return errors.New(errorMsgs)
 			}
 		}
 
-		if manifestPtn.MatchString(bagFile.Name()) == true {
-			manifestLoc := filepath.Join(bagLocation, bagFile.Name())
+		if manifestPtn.MatchString(bagFile.Name()) {
+			manifestLoc := filepath.Join(b.Path, bagFile.Name())
 			entries, e := ValidateManifest(manifestLoc, complete)
 			if len(e) > 0 {
 				errs = append(errs, e...)
@@ -103,12 +120,12 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 
 	}
 
-	dataDirName := filepath.Join(bagLocation, "data")
+	dataDirName := filepath.Join(b.Path, "data")
 	if err := filepath.WalkDir(dataDirName, func(path string, d fs.DirEntry, err error) error {
 		if d.IsDir() || dataDirName == path {
 			return nil
 		}
-		rel, err := filepath.Rel(bagLocation, path)
+		rel, err := filepath.Rel(b.Path, path)
 		if err != nil {
 			return err
 		}
@@ -121,11 +138,11 @@ func ValidateBag(bagLocation string, fast bool, complete bool) error {
 	}
 
 	if len(errs) == 0 {
-		log.Printf("- INFO - %s is valid", bagLocation)
+		log.Printf("- INFO - %s is valid", b.Name)
 		return nil
 	}
 
-	errorMsgs := gatherErrors(errs, bagLocation)
+	errorMsgs := gatherErrors(errs, b.Name)
 	return errors.New(errorMsgs)
 }
 
@@ -221,11 +238,8 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	return nil
 }
 
-func AddFileToBag(bagLocation string, file string) error {
-	//check if bag location is valid
-	if err := directoryExists(bagLocation); err != nil {
-		return err
-	}
+// Adds a file to the bag root and registers it in the tag manifest file
+func (b Bag) AddFileToBagRoot(file string) error {
 
 	//check if source file is valid
 	if err := fileExists(file); err != nil {
@@ -237,7 +251,8 @@ func AddFileToBag(bagLocation string, file string) error {
 	if err != nil {
 		return err
 	}
-	targetFilePath := filepath.Join(bagLocation, sourceFileInfo.Name())
+
+	targetFilePath := filepath.Join(b.Path, sourceFileInfo.Name())
 	log.Println(targetFilePath)
 	err = fileExists(targetFilePath)
 	if err == nil {
@@ -259,7 +274,7 @@ func AddFileToBag(bagLocation string, file string) error {
 	defer sourceFile.Close()
 
 	//write the contents of the source file to the target file
-	log.Printf("- INFO - copying file %s to %s", file, bagLocation)
+	log.Printf("- INFO - copying file %s to %s", file, b.Path)
 	if _, err := io.Copy(targetFile, sourceFile); err != nil {
 		return err
 	}
@@ -271,45 +286,17 @@ func AddFileToBag(bagLocation string, file string) error {
 	targetFile.Close()
 
 	//locate the tagmanifest
-	tagmanifest, err := FindFileInBag(bagLocation, regexp.MustCompile("tagmanifest"))
+	tagmanifest, err := FindFileInBag(b.Path, regexp.MustCompile("tagmanifest"))
 	if err != nil {
 		return err
 	}
 
 	//append new file to tagmanifest
-	if err := appendToTagManifest(targetFilePath, bagLocation, filepath.Base(tagmanifest)); err != nil {
+	if err := appendToTagManifest(targetFilePath, b.Path, filepath.Base(tagmanifest)); err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func fileExists(file string) error {
-	if _, err := os.Stat(file); err == nil {
-		return nil
-	} else if os.IsNotExist(err) {
-		errorMsg := fmt.Errorf("file %s does not exist", file)
-		return errorMsg
-	} else {
-		log.Println("- ERROR - unknown error:", err.Error())
-		return err
-	}
-}
-
-func directoryExists(inputDir string) error {
-	if fi, err := os.Stat(inputDir); err == nil {
-		if fi.IsDir() == true {
-			return nil
-		} else {
-			errorMsg := fmt.Errorf("- ERROR - input directory %s is not a directory", inputDir)
-			return errorMsg
-		}
-	} else if os.IsNotExist(err) {
-		errorMsg := fmt.Errorf("- ERROR - input %s directory does not exist", inputDir)
-		return errorMsg
-	} else {
-		return err
-	}
 }
 
 func GetFilesInBag(bagLocation string) ([]string, error) {

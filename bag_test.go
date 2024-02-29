@@ -2,11 +2,14 @@ package go_bagit
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
+
+	cp "github.com/otiai10/copy"
 )
 
 func TestValidateBag(t *testing.T) {
@@ -40,8 +43,8 @@ func TestValidateBag(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			path, _ := filepath.Abs(tc.loc)
-			err := ValidateBag(path, tc.fast, false)
+			bag, _ := GetExistingBag(tc.loc)
+			err := bag.ValidateBag(tc.fast, false)
 
 			if tc.err == "" && err != nil {
 				t.Fatalf("expected to pass; got: %v", err)
@@ -263,5 +266,42 @@ func TestBagType(t *testing.T) {
 			t.Error(err)
 		}
 		t.Log(bag)
+	})
+
+	t.Run("Add File to Bag", func(t *testing.T) {
+		src := filepath.Join("test", "valid")
+		trg := filepath.Join("test", "addFile", "valid")
+
+		if err := cp.Copy(src, trg); err != nil {
+			t.Error(err)
+		}
+
+		bag, err := GetExistingBag(trg)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if err := bag.ValidateBag(false, false); err != nil {
+			t.Error(err)
+		}
+
+		f := filepath.Join("test", "addFile", "addfile.txt")
+
+		if err := fileExists(f); err != nil {
+			t.Error(f)
+		}
+
+		if err := bag.AddFileToBagRoot(f); err != nil {
+			t.Error(err)
+		}
+
+		if err := fileExists(filepath.Join(bag.Path, "addfile.txt")); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.RemoveAll(trg); err != nil {
+			t.Error(err)
+		}
+
 	})
 }

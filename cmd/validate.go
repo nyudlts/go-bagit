@@ -16,6 +16,10 @@ func init() {
 var validateCmd = &cobra.Command{
 	Use: "validate",
 	Run: func(cmd *cobra.Command, args []string) {
-		go_bagit.ValidateBag(bagLocation, fast, complete)
+		bag, err := go_bagit.GetExistingBag(bagLocation)
+		if err != nil {
+			panic(err)
+		}
+		bag.ValidateBag(fast, complete)
 	},
 }
