@@ -10,6 +10,11 @@ import (
 
 type Payload map[string]os.FileInfo
 
+type PayloadMatch struct {
+	Path     string
+	FileInfo os.FileInfo
+}
+
 func loadPayload(bag *Bag) error {
 	dataDir := filepath.Join(bag.Path, "data")
 	err := filepath.Walk(dataDir, func(path string, info fs.FileInfo, err error) error {
@@ -26,11 +31,11 @@ func loadPayload(bag *Bag) error {
 	return nil
 }
 
-func (p Payload) FindFileInPayload(matcher *regexp.Regexp) (string, error) {
+func (p Payload) FindFileInPayload(matcher *regexp.Regexp) (PayloadMatch, error) {
 	for path, fi := range p {
 		if matcher.MatchString(path) && !fi.IsDir() {
-			return path, nil
+			return PayloadMatch{path, fi}, nil
 		}
 	}
-	return "", fmt.Errorf("Payload did not match %s", matcher.String())
+	return PayloadMatch{}, fmt.Errorf("Payload did not match %s", matcher.String())
 }

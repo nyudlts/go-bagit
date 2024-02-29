@@ -21,7 +21,7 @@ func TestPayloadFuncs(t *testing.T) {
 			t.Error(err)
 		}
 
-		if want != got {
+		if want != got.Path {
 			t.Errorf("\n%v !=\n%v", want, got)
 		}
 	})
