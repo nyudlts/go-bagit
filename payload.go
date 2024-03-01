@@ -39,3 +39,42 @@ func (p Payload) FindFileInPayload(matcher *regexp.Regexp) (PayloadMatch, error)
 	}
 	return PayloadMatch{}, fmt.Errorf("Payload did not match %s", matcher.String())
 }
+
+func (p Payload) FindDirInPayload(matcher *regexp.Regexp) (PayloadMatch, error) {
+	for path, fi := range p {
+		if matcher.MatchString(path) && fi.IsDir() {
+			return PayloadMatch{path, fi}, nil
+		}
+	}
+	return PayloadMatch{}, fmt.Errorf("Payload did not match %s", matcher.String())
+}
+
+func (p Payload) FindFilesInPayload(matcher *regexp.Regexp) []PayloadMatch {
+	payloadMatch := []PayloadMatch{}
+	for path, fi := range p {
+		if matcher.MatchString(path) && !fi.IsDir() {
+			payloadMatch = append(payloadMatch, PayloadMatch{path, fi})
+		}
+	}
+	return payloadMatch
+}
+
+func (p Payload) FindDirsInPayload(matcher *regexp.Regexp) []PayloadMatch {
+	payloadMatch := []PayloadMatch{}
+	for path, fi := range p {
+		if matcher.MatchString(path) && fi.IsDir() {
+			payloadMatch = append(payloadMatch, PayloadMatch{path, fi})
+		}
+	}
+	return payloadMatch
+}
+
+func (p Payload) FindAllInPayload(matcher *regexp.Regexp) []PayloadMatch {
+	payloadMatches := []PayloadMatch{}
+	for path, fi := range p {
+		if matcher.MatchString(path) {
+			payloadMatches = append(payloadMatches, PayloadMatch{path, fi})
+		}
+	}
+	return payloadMatches
+}
