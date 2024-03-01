@@ -31,22 +31,22 @@ func loadPayload(bag *Bag) error {
 	return nil
 }
 
-func (p Payload) FindFileInPayload(matcher *regexp.Regexp) (PayloadMatch, error) {
+func (p Payload) GetFileInPayload(filename string) (PayloadMatch, error) {
 	for path, fi := range p {
-		if matcher.MatchString(path) && !fi.IsDir() {
+		if fi.Name() == filename && !fi.IsDir() {
 			return PayloadMatch{path, fi}, nil
 		}
 	}
-	return PayloadMatch{}, fmt.Errorf("Payload did not match %s", matcher.String())
+	return PayloadMatch{}, fmt.Errorf("Payload did not match %s", filename)
 }
 
-func (p Payload) FindDirInPayload(matcher *regexp.Regexp) (PayloadMatch, error) {
+func (p Payload) GetDirInPayload(dirName string) (PayloadMatch, error) {
 	for path, fi := range p {
-		if matcher.MatchString(path) && fi.IsDir() {
+		if fi.Name() == dirName && fi.IsDir() {
 			return PayloadMatch{path, fi}, nil
 		}
 	}
-	return PayloadMatch{}, fmt.Errorf("Payload did not match %s", matcher.String())
+	return PayloadMatch{}, fmt.Errorf("Payload did not match %s", dirName)
 }
 
 func (p Payload) FindFilesInPayload(matcher *regexp.Regexp) []PayloadMatch {

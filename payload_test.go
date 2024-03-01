@@ -7,21 +7,20 @@ import (
 )
 
 func TestPayloadFuncs(t *testing.T) {
-	t.Run("Test FindFileInPayload()", func(t *testing.T) {
+	t.Run("Test GetFileInPayload()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-with-subdirs")
 		bag, err := GetExistingBag(bagRoot)
 		if err != nil {
 			t.Error(err)
 		}
-		want := "test/valid-with-subdirs/data/logs/output2.log"
-		wantPtn := regexp.MustCompile("output2.log$")
+		want := "output2.log"
 
-		got, err := bag.Payload.FindFileInPayload(wantPtn)
+		got, err := bag.Payload.GetFileInPayload(want)
 		if err != nil {
 			t.Error(err)
 		}
 
-		if want != got.Path {
+		if want != got.FileInfo.Name() {
 			t.Errorf("\n%v !=\n%v", want, got)
 		}
 	})
