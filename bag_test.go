@@ -2,11 +2,14 @@ package go_bagit
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
+
+	cp "github.com/otiai10/copy"
 )
 
 func TestValidateBag(t *testing.T) {
@@ -253,4 +256,28 @@ func TestFindDirsInBag(t *testing.T) {
 		}
 	})
 
+}
+
+func TestAddFileToBagRoot(t *testing.T) {
+	t.Run("Add a file to bag root", func(t *testing.T) {
+		source := filepath.Join("test", "valid")
+		target := filepath.Join("test", "addFile", "valid")
+		if err := cp.Copy(source, target); err != nil {
+			t.Error(err)
+		}
+
+		addFile := filepath.Join("test", "addFile", "addfile.txt")
+		bag, err := GetExistingBag(target)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if err := bag.AddFileToBagRoot(addFile); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.RemoveAll(target); err != nil {
+			t.Error(err)
+		}
+	})
 }

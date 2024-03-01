@@ -297,10 +297,14 @@ func (b Bag) AddFileToBagRoot(file string) error {
 	targetFile.Close()
 
 	//locate the tagmanifest
-	tagmanifest := b.Payload.FindFilesInPayload(regexp.MustCompile("tagmanifest"))
+	tagmanifest, err := FindFileInBag(b.Path, regexp.MustCompile("tagmanifest"))
+	if err != nil {
+		return err
+	}
 
 	//append new file to tagmanifest
-	if err := appendToTagManifest(targetFilePath, b.Path, tagmanifest[0].Path); err != nil {
+	log.Println(targetFilePath, b.Path, tagmanifest)
+	if err := appendToTagManifest(targetFilePath, b.Path, filepath.Base(tagmanifest)); err != nil {
 		return err
 	}
 
