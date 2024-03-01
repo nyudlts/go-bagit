@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"log"
+
 	go_bagit "github.com/nyudlts/go-bagit"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 func init() {
@@ -18,7 +19,11 @@ var tagManifestCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if addBagFile == true {
 			//Add a file to a bag
-			if err := go_bagit.AddFileToBag(bagLocation, file); err != nil {
+			b, err := go_bagit.GetExistingBag(bagLocation)
+			if err != nil {
+				panic(err)
+			}
+			if err := b.AddFileToBagRoot(file); err != nil {
 				panic(err)
 			}
 		} else {

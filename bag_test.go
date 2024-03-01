@@ -2,14 +2,11 @@ package go_bagit
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
-
-	cp "github.com/otiai10/copy"
 )
 
 func TestValidateBag(t *testing.T) {
@@ -65,7 +62,6 @@ func TestValidateBag(t *testing.T) {
 func TestGetFilesInBag(t *testing.T) {
 	t.Run("Test GetFilesInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-with-subdirs")
-		bag, err := GetExistingBag(bagRoot)
 
 		want := []string{
 			"test/valid-with-subdirs/bagit.txt",
@@ -77,7 +73,7 @@ func TestGetFilesInBag(t *testing.T) {
 			"test/valid-with-subdirs/data/logs/output1.log",
 		}
 
-		got, err := bag.GetFilesInBag()
+		got, err := GetFilesInBag(bagRoot)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -106,10 +102,7 @@ func TestGetFilesInBag(t *testing.T) {
 func TestGetDirsInBag(t *testing.T) {
 	t.Run("Test GetDirsInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
-		bag, err := GetExistingBag(bagRoot)
-		if err != nil {
-			t.Error(err)
-		}
+
 		want := []string{
 			"test/valid-erecord-with-subdirs",
 			"test/valid-erecord-with-subdirs/data",
@@ -126,7 +119,7 @@ func TestGetDirsInBag(t *testing.T) {
 			"test/valid-erecord-with-subdirs/data/objects/submissionDocumentation/transfer-fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5",
 		}
 
-		got, err := bag.GetDirsInBag()
+		got, err := GetDirsInBag(bagRoot)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -155,14 +148,11 @@ func TestGetDirsInBag(t *testing.T) {
 func TestFindFileInBag(t *testing.T) {
 	t.Run("Test FindFileInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-with-subdirs")
-		bag, err := GetExistingBag(bagRoot)
-		if err != nil {
-			t.Error(err)
-		}
+
 		want := "test/valid-with-subdirs/data/logs/output2.log"
 		wantPtn := regexp.MustCompile("output2.log$")
 
-		got, err := bag.FindFileInBag(wantPtn)
+		got, err := FindFileInBag(bagRoot, wantPtn)
 		if err != nil {
 			t.Error(err)
 		}
@@ -176,17 +166,14 @@ func TestFindFileInBag(t *testing.T) {
 func TestFindFilesInBag(t *testing.T) {
 	t.Run("Test FindFilesInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
-		bag, err := GetExistingBag(bagRoot)
-		if err != nil {
-			t.Error(err)
-		}
+
 		want := []string{
 			"test/valid-erecord-with-subdirs/fales_mss2023_cuid39675_aspace_wo.tsv",
 			"test/valid-erecord-with-subdirs/data/objects/metadata/transfers/fales_mss2023_cuid39675-48b63462-0fec-4f6a-8913-1f2e2f9168e5/fales_mss2023_cuid39675_aspace_wo.tsv",
 		}
 		wantPtn := regexp.MustCompile("_aspace_wo.tsv$")
 
-		got, err := bag.FindFilesInBag(wantPtn)
+		got, err := FindFilesInBag(bagRoot, wantPtn)
 		if err != nil {
 			t.Error(err)
 		}
@@ -216,14 +203,11 @@ func TestFindFilesInBag(t *testing.T) {
 func TestFindDirInBag(t *testing.T) {
 	t.Run("Test FindDirInBag()", func(t *testing.T) {
 		bagRoot := filepath.Join("test", "valid-erecord-with-subdirs")
-		bag, err := GetExistingBag(bagRoot)
-		if err != nil {
-			t.Error(err)
-		}
+
 		want := "test/valid-erecord-with-subdirs/data/objects/cuid39675"
 		wantPtn := regexp.MustCompile("objects/cuid39675$")
 
-		got, err := bag.FindDirInBag(wantPtn)
+		got, err := FindDirInBag(bagRoot, wantPtn)
 		if err != nil {
 			t.Error(err)
 		}
@@ -269,52 +253,4 @@ func TestFindDirsInBag(t *testing.T) {
 		}
 	})
 
-}
-
-// testing bag type
-func TestBagType(t *testing.T) {
-	t.Run("Test Opening Valid Bag", func(t *testing.T) {
-		bag, err := GetExistingBag("test/valid")
-		if err != nil {
-			t.Error(err)
-		}
-		t.Log(bag)
-	})
-
-	t.Run("Add File to Bag", func(t *testing.T) {
-		src := filepath.Join("test", "valid")
-		trg := filepath.Join("test", "addFile", "valid")
-
-		if err := cp.Copy(src, trg); err != nil {
-			t.Error(err)
-		}
-
-		bag, err := GetExistingBag(trg)
-		if err != nil {
-			t.Error(err)
-		}
-
-		if err := bag.ValidateBag(false, false); err != nil {
-			t.Error(err)
-		}
-
-		f := filepath.Join("test", "addFile", "addfile.txt")
-
-		if err := fileExists(f); err != nil {
-			t.Error(f)
-		}
-
-		if err := bag.AddFileToBagRoot(f); err != nil {
-			t.Error(err)
-		}
-
-		if err := fileExists(filepath.Join(bag.Path, "addfile.txt")); err != nil {
-			t.Error(err)
-		}
-
-		if err := os.RemoveAll(trg); err != nil {
-			t.Error(err)
-		}
-
-	})
 }
