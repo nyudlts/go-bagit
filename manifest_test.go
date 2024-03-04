@@ -68,6 +68,25 @@ func TestManifests(t *testing.T) {
 		}
 	})
 
+	t.Run("Test Get Multiple Manifests", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid-with-multi-manifests"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Log(bag)
+
+		manifests, err := GetManifests(bag.Path)
+		if err != nil {
+			t.Error(err)
+		}
+
+		t.Log(manifests)
+		if len(manifests) != 2 {
+			t.Errorf("ERROR")
+		}
+	})
+
 	t.Run("Test Get Tag Manifests", func(t *testing.T) {
 		bag, err := GetExistingBag(filepath.Join("test", "valid-with-subdirs"))
 		if err != nil {
@@ -83,6 +102,25 @@ func TestManifests(t *testing.T) {
 
 		t.Log(manifests)
 		if len(manifests) != 1 {
+			t.Errorf("ERROR")
+		}
+	})
+
+	t.Run("Test Get Multiple Tag Manifests", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid-with-multi-manifests"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Log(bag)
+
+		manifests, err := GetTagManifests(bag.Path)
+		if err != nil {
+			t.Error(err)
+		}
+
+		t.Log(manifests)
+		if len(manifests) != 2 {
 			t.Errorf("ERROR")
 		}
 	})

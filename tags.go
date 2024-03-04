@@ -9,6 +9,9 @@ import (
 	"strings"
 )
 
+type Bagit TagSet
+type BagInfo TagSet
+
 var StandardTags = GetStandardTags()
 
 func CreateBagit() TagSet {

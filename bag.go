@@ -16,7 +16,8 @@ type Bag struct {
 	Name         string
 	AbsPath      string
 	Payload      Payload
-	TagSets      []TagSet
+	BagInfo      BagInfo
+	BagIt        Bagit
 	Manifests    ManifestRefs
 	TagManifests ManifestRefs
 }
