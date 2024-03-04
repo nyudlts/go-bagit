@@ -306,3 +306,45 @@ func TestManifestFunctionsInBag(t *testing.T) {
 		}
 	})
 }
+
+func TestTagFileFunctionsInBag(t *testing.T) {
+	t.Run("Test Get Bagit.txt file", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		tags := map[string]string{
+			StandardTags.BagItVersion:             "0.97",
+			StandardTags.TagFileCharacterEncoding: "UTF-8",
+		}
+
+		for k, v := range tags {
+			got := bag.BagIt.Tags[k]
+			want := v
+			if want != got {
+				t.Errorf("Wanted %s got %s", want, got)
+			}
+		}
+	})
+
+	t.Run("Test Get Bag-info.txt file", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		tags := map[string]string{
+			StandardTags.BagSoftwareAgent: "bagit.py v1.8.1 <https://github.com/LibraryOfCongress/bagit-python>",
+			StandardTags.BaggingDate:      "2021-10-11",
+		}
+
+		for k, v := range tags {
+			got := bag.BagInfo.Tags[k]
+			want := v
+			if want != got {
+				t.Errorf("Wanted %s got %s", want, got)
+			}
+		}
+	})
+}

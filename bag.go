@@ -16,8 +16,8 @@ type Bag struct {
 	Name         string
 	AbsPath      string
 	Payload      Payload
-	BagInfo      BagInfo
-	BagIt        Bagit
+	BagInfo      TagSet
+	BagIt        TagSet
 	Manifests    ManifestRefs
 	TagManifests ManifestRefs
 }
@@ -43,6 +43,18 @@ func GetExistingBag(path string) (Bag, error) {
 	//set name
 	pathSplit := strings.Split(bag.AbsPath, string(os.PathSeparator))
 	bag.Name = pathSplit[len(pathSplit)-1]
+
+	//get Bagit.txt
+	bag.BagIt, err = NewTagSet("bagit.txt", bag.Path)
+	if err != nil {
+		return bag, err
+	}
+
+	//get Baginfo.txt
+	bag.BagInfo, err = NewTagSet("bag-info.txt", bag.Path)
+	if err != nil {
+		return bag, err
+	}
 
 	//get Manifests
 	bag.Manifests, err = GetManifests(bag.Path)
