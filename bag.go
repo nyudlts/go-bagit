@@ -73,10 +73,6 @@ func GetExistingBag(path string) (Bag, error) {
 		return bag, err
 	}
 
-	if err := bag.ValidateBag(false, false); err != nil {
-		return bag, err
-	}
-
 	return bag, nil
 }
 

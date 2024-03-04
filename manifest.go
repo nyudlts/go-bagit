@@ -18,7 +18,7 @@ type Manifest struct {
 	Algorithm string
 }
 
-var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
+var manifestPtn = regexp.MustCompile("^manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
 type ManifestRefs map[string]os.FileInfo
