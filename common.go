@@ -4,29 +4,33 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime/debug"
 	"time"
 )
 
 var currentTime = time.Now()
 
+const version = "0.2.3-alpha"
+
 func GetSoftwareAgent() string {
 	const mod = "github.com/nyudlts/go-bagit"
 
-	info, ok := debug.ReadBuildInfo()
-	if !ok {
-		return fmt.Sprintf("go-bagit <https://%s>", mod)
-	}
-
-	version := "(unknown)"
-	for _, dep := range info.Deps {
-		if dep.Path == mod {
-			version = dep.Version
-			break
+	//this is broken always returns "devel"
+	/*
+		info, ok := debug.ReadBuildInfo()
+		if !ok {
+			return fmt.Sprintf("go-bagit <https://%s>", mod)
 		}
-	}
 
-	return fmt.Sprintf("go-bagit %s <https://%s>", version, mod)
+		version := "(unknown)"
+		for _, dep := range info.Deps {
+			if dep.Path == mod {
+				version = dep.Version
+				break
+			}
+		}
+	*/
+
+	return fmt.Sprintf("go-bagit (%s) <https://%s>", version, mod)
 }
 
 func getABS(path string) (string, error) {

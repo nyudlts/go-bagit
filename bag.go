@@ -236,18 +236,18 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) (Bag, error)
 		return Bag{}, err
 	}
 
-	//Generate bagit.txt
+	//Generate and serialize bagit.txt
 	log.Println("- INFO - Creating bagit.txt")
 	bagit := CreateBagit()
-
-	//serialize bagit
 	bagitBytes := bagit.GetTagSetAsByteSlice()
 	if err = os.WriteFile(filepath.Join(inputDir, bagit.Filename), bagitBytes, 0755); err != nil {
 		return Bag{}, err
 	}
+	bagit.Path = inputDir //this can be deleted
 
-	bagit.Path = inputDir
+	//generate and serialize bag-info.txt
 	log.Println("- INFO - Creating bag-info.txt")
+
 	//get the oxum
 	oxum, err := CalculateOxum(inputDir)
 	if err != nil {
@@ -274,7 +274,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) (Bag, error)
 	return bag, err
 }
 
-// Adds a file to the bag root and registers it in the tag manifest file
+// Adds a file to the bag root and registers it in the tagmanifest file
 func (b Bag) AddFileToBagRoot(file string) error {
 
 	//check if source file is valid
