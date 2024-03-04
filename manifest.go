@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -17,6 +16,51 @@ type Manifest struct {
 	Filename  string
 	EntryMap  map[string]string
 	Algorithm string
+}
+
+var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
+var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
+
+type ManifestRefs map[string]os.FileInfo
+
+func GetManifests(bagLocation string) (ManifestRefs, error) {
+	manifestRefs := ManifestRefs{}
+	rootFiles, err := os.ReadDir(bagLocation)
+	if err != nil {
+		return manifestRefs, err
+	}
+
+	for _, file := range rootFiles {
+		if manifestPtn.MatchString(file.Name()) && !tagmanifestPtn.MatchString(file.Name()) {
+			fi, err := os.Stat(filepath.Join(bagLocation, file.Name()))
+			if err != nil {
+				return manifestRefs, err
+			}
+			manifestRefs[filepath.Join(bagLocation, file.Name())] = fi
+		}
+	}
+
+	return manifestRefs, nil
+}
+
+func GetTagManifests(bagLocation string) (ManifestRefs, error) {
+	manifestRefs := ManifestRefs{}
+	rootFiles, err := os.ReadDir(bagLocation)
+	if err != nil {
+		return manifestRefs, err
+	}
+
+	for _, file := range rootFiles {
+		if tagmanifestPtn.MatchString(file.Name()) {
+			fi, err := os.Stat(filepath.Join(bagLocation, file.Name()))
+			if err != nil {
+				return manifestRefs, err
+			}
+			manifestRefs[filepath.Join(bagLocation, file.Name())] = fi
+		}
+	}
+
+	return manifestRefs, nil
 }
 
 func NewManifest(bag string, filename string) (Manifest, error) {
@@ -63,7 +107,7 @@ func (manifest Manifest) Serialize() error {
 	for filename, checksum := range manifest.EntryMap {
 		entries = append(entries, []byte(fmt.Sprintf("%s %s\n", checksum, filename))...)
 	}
-	if err := ioutil.WriteFile(outfile, entries, 0777); err != nil {
+	if err := os.WriteFile(outfile, entries, 0777); err != nil {
 		return err
 	}
 	return nil

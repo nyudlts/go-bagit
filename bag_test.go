@@ -281,3 +281,28 @@ func TestAddFileToBagRoot(t *testing.T) {
 		}
 	})
 }
+
+func TestManifestFunctionsInBag(t *testing.T) {
+	t.Run("Test Bag has Manifest File", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Log(bag.Manifests)
+		if len(bag.Manifests) != 1 {
+			t.Error("Bag did not contain a manifest file")
+		}
+	})
+
+	t.Run("Test Bag has Tag Manifest File", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Log(bag.TagManifests)
+		if len(bag.TagManifests) != 1 {
+			t.Error("Bag did not contain a manifest file")
+		}
+	})
+}

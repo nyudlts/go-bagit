@@ -12,12 +12,13 @@ import (
 )
 
 type Bag struct {
-	Path      string
-	Name      string
-	AbsPath   string
-	Payload   Payload
-	TagSets   []TagSet
-	Manifests []Manifest
+	Path         string
+	Name         string
+	AbsPath      string
+	Payload      Payload
+	TagSets      []TagSet
+	Manifests    ManifestRefs
+	TagManifests ManifestRefs
 }
 
 func GetExistingBag(path string) (Bag, error) {
@@ -41,6 +42,18 @@ func GetExistingBag(path string) (Bag, error) {
 	//set name
 	pathSplit := strings.Split(bag.AbsPath, string(os.PathSeparator))
 	bag.Name = pathSplit[len(pathSplit)-1]
+
+	//get Manifests
+	bag.Manifests, err = GetManifests(bag.Path)
+	if err != nil {
+		return bag, err
+	}
+
+	//get Tag Manifests
+	bag.TagManifests, err = GetTagManifests(bag.Path)
+	if err != nil {
+		return bag, err
+	}
 
 	bag.Payload = make(map[string]os.FileInfo)
 	if err := loadPayload(&bag); err != nil {

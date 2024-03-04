@@ -4,13 +4,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
 	"runtime/debug"
 	"time"
 )
-
-var manifestPtn = regexp.MustCompile("manifest-.*\\.txt$")
-var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
 var currentTime = time.Now()
 
