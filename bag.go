@@ -195,10 +195,10 @@ func gatherErrors(errs []error, bagLocation string) string {
 	return errorMsgs
 }
 
-func CreateBag(inputDir string, algorithm string, numProcesses int) error {
+func CreateBag(inputDir string, algorithm string, numProcesses int) (Bag, error) {
 	//check that input exists and is a directory
 	if err := directoryExists(inputDir); err != nil {
-		return err
+		return Bag{}, err
 	}
 
 	log.Printf("- INFO - Creating Bag for directory %s", inputDir)
@@ -206,14 +206,14 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	//create a slice of files
 	filesToBag, err := os.ReadDir(inputDir)
 	if err != nil {
-		return err
+		return Bag{}, err
 	}
 
 	//check there is at least one file to be bagged.
 	if len(filesToBag) < 1 {
-		errMsg := fmt.Errorf("Could not create a bag, no files present in %s", inputDir)
+		errMsg := fmt.Errorf("could not create a bag, no files present in %s", inputDir)
 		log.Println("- ERROR -", errMsg)
-		return errMsg
+		return Bag{}, errMsg
 	}
 
 	//create a data directory for payload
@@ -221,7 +221,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 	dataDirName := filepath.Join(inputDir, "data")
 	if err := os.Mkdir(dataDirName, 0777); err != nil {
 		log.Println("- ERROR -", err)
-		return err
+		return Bag{}, err
 	}
 
 	//move the payload files into data dir
@@ -231,48 +231,51 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) error {
 		log.Printf("- INFO - Moving %s to %s", originalLocation, newLocation)
 		if err := os.Rename(originalLocation, newLocation); err != nil {
 			log.Println("- ERROR -", err.Error())
-			return err
+			return Bag{}, err
 		}
 	}
 
 	//Generate the manifest
 	if err := CreateManifest("manifest", inputDir, algorithm, numProcesses); err != nil {
-		return err
+		return Bag{}, err
 	}
 
 	//Generate bagit.txt
 	log.Println("- INFO - Creating bagit.txt")
 	bagit := CreateBagit()
+
+	//serialize bagit
+	bagitBytes := bagit.GetTagSetAsByteSlice()
+	if err = os.WriteFile(filepath.Join(inputDir, bagit.Filename), bagitBytes, 0755); err != nil {
+		return Bag{}, err
+	}
+
 	bagit.Path = inputDir
-	/*
-		if err := bagit.Serialize(); err != nil {
-			return err
-		}
-	*/
-
-	//Generate bag-info.txt
 	log.Println("- INFO - Creating bag-info.txt")
-
 	//get the oxum
 	oxum, err := CalculateOxum(inputDir)
 	if err != nil {
-		return err
+		return Bag{}, err
 	}
 	bagInfo := CreateBagInfo()
 	bagInfo.Tags[StandardTags.PayloadOxum] = oxum.String()
 	bagInfo.Path = inputDir
-	/*
-		if err := bagInfo.Serialize(); err != nil {
-			return err
-		}
-	*/
+	bagInfoBytes := bagInfo.GetTagSetAsByteSlice()
+	if err = os.WriteFile(filepath.Join(inputDir, bagInfo.Filename), bagInfoBytes, 0755); err != nil {
+		return Bag{}, err
+	}
+
 	//Generate TagManifest
 	if err := CreateTagManifest(inputDir, algorithm, numProcesses); err != nil {
-		return err
+		return Bag{}, err
 	}
 
 	//you are done
-	return nil
+	bag, err := GetExistingBag(inputDir)
+	if err != nil {
+		return bag, err
+	}
+	return bag, err
 }
 
 // Adds a file to the bag root and registers it in the tag manifest file
