@@ -348,3 +348,39 @@ func TestTagFileFunctionsInBag(t *testing.T) {
 		}
 	})
 }
+
+func TestCreateABag(t *testing.T) {
+	t.Run("Create A Bag From Existing Dir", func(t *testing.T) {
+		bag, err := CreateBag(filepath.Join("test", "bag-me"), "sha256", 1)
+		if err != nil {
+			t.Error(err)
+		}
+
+		log.Println("Bag created", bag)
+
+		if err := bag.ValidateBag(false, true); err != nil {
+			t.Error(err)
+		}
+
+		//reset the data
+		if err := cp.Copy(filepath.Join("test", "bag-me", "data", "test.txt"), filepath.Join("test", "test.txt")); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.RemoveAll(filepath.Join("test", "bag-me")); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.Mkdir(filepath.Join("test", "bag-me"), 0755); err != nil {
+			t.Error(err)
+		}
+
+		if err := cp.Copy(filepath.Join("test", "test.txt"), filepath.Join("test", "bag-me", "test.txt")); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.Remove(filepath.Join("test", "test.txt")); err != nil {
+			t.Error(err)
+		}
+	})
+}
