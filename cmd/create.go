@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	go_bagit "github.com/nyudlts/go-bagit"
 	"github.com/spf13/cobra"
 )
@@ -15,9 +17,11 @@ func init() {
 var createCmd = &cobra.Command{
 	Use: "create",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := go_bagit.CreateBag(inputDir, checksumAlgorithm, numProcesses); err != nil {
+		bag, err := go_bagit.CreateBag(inputDir, checksumAlgorithm, numProcesses)
+		if err != nil {
 			panic(err)
 		}
 
+		fmt.Println(bag.Name)
 	},
 }

@@ -1,6 +1,12 @@
 # go-bagit
 Early Go implementation of the bagit specification
 
+## Unsupported features
+* Windows support
+* creation of bags with multiple algorithm manifests
+* fetch.txt / holey bags
+* tag files other than bagit.txt and bag-info.txt
+
 ## Building From Source
 `go build -o go-bagit main/main.go`
 

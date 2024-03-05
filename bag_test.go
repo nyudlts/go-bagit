@@ -2,11 +2,14 @@ package go_bagit
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
+
+	cp "github.com/otiai10/copy"
 )
 
 func TestValidateBag(t *testing.T) {
@@ -40,8 +43,8 @@ func TestValidateBag(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			path, _ := filepath.Abs(tc.loc)
-			err := ValidateBag(path, tc.fast, false)
+			bag, _ := GetExistingBag(tc.loc)
+			err := bag.ValidateBag(tc.fast, false)
 
 			if tc.err == "" && err != nil {
 				t.Fatalf("expected to pass; got: %v", err)
@@ -253,4 +256,131 @@ func TestFindDirsInBag(t *testing.T) {
 		}
 	})
 
+}
+
+func TestAddFileToBagRoot(t *testing.T) {
+	t.Run("Add a file to bag root", func(t *testing.T) {
+		source := filepath.Join("test", "valid")
+		target := filepath.Join("test", "addFile", "valid")
+		if err := cp.Copy(source, target); err != nil {
+			t.Error(err)
+		}
+
+		addFile := filepath.Join("test", "addFile", "addfile.txt")
+		bag, err := GetExistingBag(target)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if err := bag.AddFileToBagRoot(addFile); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.RemoveAll(target); err != nil {
+			t.Error(err)
+		}
+	})
+}
+
+func TestManifestFunctionsInBag(t *testing.T) {
+	t.Run("Test Bag has Manifest File", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Log(bag.Manifests)
+		if len(bag.Manifests) != 1 {
+			t.Error("Bag did not contain a manifest file")
+		}
+	})
+
+	t.Run("Test Bag has Tag Manifest File", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Log(bag.TagManifests)
+		if len(bag.TagManifests) != 1 {
+			t.Error("Bag did not contain a manifest file")
+		}
+	})
+}
+
+func TestTagFileFunctionsInBag(t *testing.T) {
+	t.Run("Test Get Bagit.txt file", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		tags := map[string]string{
+			StandardTags.BagItVersion:             "0.97",
+			StandardTags.TagFileCharacterEncoding: "UTF-8",
+		}
+
+		for k, v := range tags {
+			got := bag.BagIt.Tags[k]
+			want := v
+			if want != got {
+				t.Errorf("Wanted %s got %s", want, got)
+			}
+		}
+	})
+
+	t.Run("Test Get Bag-info.txt file", func(t *testing.T) {
+		bag, err := GetExistingBag(filepath.Join("test", "valid"))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		tags := map[string]string{
+			StandardTags.BagSoftwareAgent: "bagit.py v1.8.1 <https://github.com/LibraryOfCongress/bagit-python>",
+			StandardTags.BaggingDate:      "2021-10-11",
+		}
+
+		for k, v := range tags {
+			got := bag.BagInfo.Tags[k]
+			want := v
+			if want != got {
+				t.Errorf("Wanted %s got %s", want, got)
+			}
+		}
+	})
+}
+
+func TestCreateABag(t *testing.T) {
+	t.Run("Create A Bag From Existing Dir", func(t *testing.T) {
+		bag, err := CreateBag(filepath.Join("test", "bag-me"), "sha256", 1)
+		if err != nil {
+			t.Error(err)
+		}
+
+		log.Println("Bag created", bag)
+
+		if err := bag.ValidateBag(false, true); err != nil {
+			t.Error(err)
+		}
+
+		//reset the data
+		if err := cp.Copy(filepath.Join("test", "bag-me", "data", "test.txt"), filepath.Join("test", "test.txt")); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.RemoveAll(filepath.Join("test", "bag-me")); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.Mkdir(filepath.Join("test", "bag-me"), 0755); err != nil {
+			t.Error(err)
+		}
+
+		if err := cp.Copy(filepath.Join("test", "test.txt"), filepath.Join("test", "bag-me", "test.txt")); err != nil {
+			t.Error(err)
+		}
+
+		if err := os.Remove(filepath.Join("test", "test.txt")); err != nil {
+			t.Error(err)
+		}
+	})
 }

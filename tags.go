@@ -9,6 +9,9 @@ import (
 	"strings"
 )
 
+type Bagit TagSet
+type BagInfo TagSet
+
 var StandardTags = GetStandardTags()
 
 func CreateBagit() TagSet {
@@ -85,6 +88,8 @@ type StandardTagSet struct {
 	BagGroupIdentifier        string
 	InternalSenderIdentifier  string
 	InternalSenderDescription string
+	BagItVersion              string
+	TagFileCharacterEncoding  string
 }
 
 func GetStandardTags() StandardTagSet {
@@ -104,6 +109,8 @@ func GetStandardTags() StandardTagSet {
 	standardTags.BagGroupIdentifier = "Bag-Group-Identifier"
 	standardTags.InternalSenderIdentifier = "Internal-Sender-Identifier"
 	standardTags.InternalSenderDescription = "Internal-Sender-Description"
+	standardTags.BagItVersion = "BagIt-Version"
+	standardTags.TagFileCharacterEncoding = "Tag-File-Character-Encoding"
 	return standardTags
 }
 
