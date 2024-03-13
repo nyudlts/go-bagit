@@ -45,9 +45,9 @@ func GetOxum(bagLocation string) (string, error) {
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		splitLine := strings.Split(line, ":")
-		if splitLine[0] == "Payload-Oxum" {
-			return strings.TrimSpace(splitLine[1]), nil
+		before, after, _ := strings.Cut(line, ":")
+		if before == "Payload-Oxum" {
+			return strings.TrimSpace(after), nil
 		}
 	}
 

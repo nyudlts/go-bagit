@@ -47,8 +47,8 @@ func NewTagSet(filename string, bagLocation string) (TagSet, error) {
 
 	scanner := bufio.NewScanner(tagFile)
 	for scanner.Scan() {
-		kv := strings.Split(scanner.Text(), ": ")
-		tags[kv[0]] = kv[1]
+		before, after, _ := strings.Cut(scanner.Text(), ": ")
+		tags[before] = after
 	}
 
 	tagFile.Close()
