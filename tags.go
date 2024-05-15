@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 )
 
 type Bagit TagSet
@@ -24,12 +25,12 @@ func CreateBagit() TagSet {
 	}
 }
 
-func CreateBagInfo() TagSet {
+func CreateBagInfo(t time.Time) TagSet {
 	return TagSet{
 		Filename: "bag-info.txt",
 		Tags: map[string]string{
 			StandardTags.BagSoftwareAgent: GetSoftwareAgent(),
-			StandardTags.BaggingDate:      fmt.Sprintf(currentTime.Format("2006-02-01")),
+			StandardTags.BaggingDate:      t.Round(0).Format(time.DateOnly),
 		},
 	}
 }
