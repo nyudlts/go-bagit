@@ -253,7 +253,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) (Bag, error)
 	if err != nil {
 		return Bag{}, err
 	}
-	bagInfo := CreateBagInfo()
+	bagInfo := CreateBagInfo(currentTime)
 	bagInfo.Tags[StandardTags.PayloadOxum] = oxum.String()
 	bagInfo.Path = inputDir
 	bagInfoBytes := bagInfo.GetTagSetAsByteSlice()
