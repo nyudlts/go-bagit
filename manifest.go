@@ -279,7 +279,8 @@ func CreateTagManifest(inputDir string, algorithm string, numProcesses int) erro
 }
 
 func createManifestFile(bagLocation string, manifestFileName string, manifestLines []string) error {
-	outFile, err := os.Create(filepath.Join(bagLocation, manifestFileName))
+	path := filepath.Join(bagLocation, manifestFileName)
+	outFile, err := os.Create(path)
 	if err != nil {
 		return err
 	}
@@ -288,6 +289,9 @@ func createManifestFile(bagLocation string, manifestFileName string, manifestLin
 	for _, manifestLine := range manifestLines {
 		writer.WriteString(manifestLine + "\n")
 		writer.Flush()
+	}
+	if err := os.Chmod(path, fileMode); err != nil {
+		log.Println("- WARNING -", err.Error())
 	}
 	return nil
 }
