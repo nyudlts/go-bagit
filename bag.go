@@ -11,6 +11,11 @@ import (
 	"strings"
 )
 
+const (
+	dirMode  os.FileMode = 0o777
+	fileMode os.FileMode = 0o666
+)
+
 type Bag struct {
 	Path         string
 	Name         string
@@ -215,7 +220,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) (Bag, error)
 	//create a data directory for payload
 	log.Println("- INFO - Creating data directory")
 	dataDirName := filepath.Join(inputDir, "data")
-	if err := os.Mkdir(dataDirName, 0777); err != nil {
+	if err := os.Mkdir(dataDirName, dirMode); err != nil {
 		log.Println("- ERROR -", err)
 		return Bag{}, err
 	}
@@ -240,7 +245,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) (Bag, error)
 	log.Println("- INFO - Creating bagit.txt")
 	bagit := CreateBagit()
 	bagitBytes := bagit.GetTagSetAsByteSlice()
-	if err = os.WriteFile(filepath.Join(inputDir, bagit.Filename), bagitBytes, 0755); err != nil {
+	if err = os.WriteFile(filepath.Join(inputDir, bagit.Filename), bagitBytes, fileMode); err != nil {
 		return Bag{}, err
 	}
 	bagit.Path = inputDir //this can be deleted
@@ -257,7 +262,7 @@ func CreateBag(inputDir string, algorithm string, numProcesses int) (Bag, error)
 	bagInfo.Tags[StandardTags.PayloadOxum] = oxum.String()
 	bagInfo.Path = inputDir
 	bagInfoBytes := bagInfo.GetTagSetAsByteSlice()
-	if err = os.WriteFile(filepath.Join(inputDir, bagInfo.Filename), bagInfoBytes, 0755); err != nil {
+	if err = os.WriteFile(filepath.Join(inputDir, bagInfo.Filename), bagInfoBytes, fileMode); err != nil {
 		return Bag{}, err
 	}
 

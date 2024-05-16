@@ -21,7 +21,12 @@ type Manifest struct {
 var manifestPtn = regexp.MustCompile("^manifest-.*\\.txt$")
 var tagmanifestPtn = regexp.MustCompile("tagmanifest-.*\\.txt$")
 
-type ManifestRefs map[string]os.FileInfo
+type fileinfo struct {
+	path string
+	info fs.FileInfo
+}
+
+type ManifestRefs []fileinfo
 
 func GetManifests(bagLocation string) (ManifestRefs, error) {
 	manifestRefs := ManifestRefs{}
@@ -36,7 +41,10 @@ func GetManifests(bagLocation string) (ManifestRefs, error) {
 			if err != nil {
 				return manifestRefs, err
 			}
-			manifestRefs[filepath.Join(bagLocation, file.Name())] = fi
+			manifestRefs = append(manifestRefs, fileinfo{
+				path: filepath.Join(bagLocation, file.Name()),
+				info: fi,
+			})
 		}
 	}
 
@@ -56,7 +64,10 @@ func GetTagManifests(bagLocation string) (ManifestRefs, error) {
 			if err != nil {
 				return manifestRefs, err
 			}
-			manifestRefs[filepath.Join(bagLocation, file.Name())] = fi
+			manifestRefs = append(manifestRefs, fileinfo{
+				path: filepath.Join(bagLocation, file.Name()),
+				info: fi,
+			})
 		}
 	}
 

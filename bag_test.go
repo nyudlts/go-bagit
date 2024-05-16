@@ -2,14 +2,18 @@ package go_bagit
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
+	"time"
 
 	cp "github.com/otiai10/copy"
+	"gotest.tools/v3/assert"
+	tfs "gotest.tools/v3/fs"
 )
 
 func TestValidateBag(t *testing.T) {
@@ -350,37 +354,53 @@ func TestTagFileFunctionsInBag(t *testing.T) {
 }
 
 func TestCreateABag(t *testing.T) {
+	var (
+		dirMode  fs.FileMode = 0o775
+		fileMode fs.FileMode = 0o664
+
+		baginfoContent = fmt.Sprintf(
+			`Bag-Software-Agent: go-bagit (%s) <https://github.com/nyudlts/go-bagit>
+Bagging-Date: %s
+Payload-Oxum: 42.2
+`,
+			version,
+			time.Now().Round(0).Format(time.DateOnly),
+		)
+
+		bagitContent = `BagIt-Version: 0.97
+Tag-File-Character-Encoding: UTF-8
+`
+		manifestContent = `bf73d81371ea21348bfb510d8c8948bb64e0eb3cea97ec991a4170e777b6de18  data/test.txt
+091e8c6b2cb96659e3c52b3b585d0885989bba9eed34d77563fe0abaf64741ea  data/test2.txt
+`
+
+		tagManifestContent = `ad8a47df4613044f0e02dca845ac531eae7e7fe6deb30659912333ce83cd8059  bag-info.txt
+e91f941be5973ff71f1dccbdd1a32d598881893a7f21be516aca743da38b1689  bagit.txt
+ea937667fac06dad61c25afa53a134e97b0b51f6b912b8548e4b32ef2dc2b7f6  manifest-sha256.txt
+`
+	)
+
 	t.Run("Create A Bag From Existing Dir", func(t *testing.T) {
-		bag, err := CreateBag(filepath.Join("test", "bag-me"), "sha256", 1)
+		testDir := tfs.NewDir(t, "gobagit_create_bag_test")
+		cp.Copy(filepath.Join("test", "bag-me"), testDir.Path())
+
+		bag, err := CreateBag(testDir.Path(), "sha256", 1)
 		if err != nil {
 			t.Error(err)
 		}
 
 		log.Println("Bag created", bag)
 
-		if err := bag.ValidateBag(false, true); err != nil {
-			t.Error(err)
-		}
-
-		//reset the data
-		if err := cp.Copy(filepath.Join("test", "bag-me", "data", "test.txt"), filepath.Join("test", "test.txt")); err != nil {
-			t.Error(err)
-		}
-
-		if err := os.RemoveAll(filepath.Join("test", "bag-me")); err != nil {
-			t.Error(err)
-		}
-
-		if err := os.Mkdir(filepath.Join("test", "bag-me"), 0755); err != nil {
-			t.Error(err)
-		}
-
-		if err := cp.Copy(filepath.Join("test", "test.txt"), filepath.Join("test", "bag-me", "test.txt")); err != nil {
-			t.Error(err)
-		}
-
-		if err := os.Remove(filepath.Join("test", "test.txt")); err != nil {
-			t.Error(err)
-		}
+		assert.Assert(t, tfs.Equal(testDir.Path(), tfs.Expected(t,
+			tfs.WithMode(0o755),
+			tfs.WithFile("bag-info.txt", baginfoContent, tfs.WithMode(fileMode)),
+			tfs.WithFile("bagit.txt", bagitContent, tfs.WithMode(fileMode)),
+			tfs.WithFile("manifest-sha256.txt", manifestContent, tfs.WithMode(fileMode)),
+			tfs.WithFile("tagmanifest-sha256.txt", tagManifestContent, tfs.WithMode(fileMode)),
+			tfs.WithDir("data", tfs.WithMode(dirMode),
+				tfs.WithFile("test.txt", "I am a test file.\n", tfs.WithMode(fileMode)),
+				tfs.WithFile("test2.txt", "I am another test file.\n", tfs.WithMode(fileMode)),
+			),
+		)))
 	})
 }
