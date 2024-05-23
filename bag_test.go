@@ -352,29 +352,47 @@ func TestTagFileFunctionsInBag(t *testing.T) {
 	})
 }
 
-func TestCreateABag(t *testing.T) {
-	var (
-		baginfoContent = fmt.Sprintf(
-			`Bag-Software-Agent: go-bagit (%s) <https://github.com/nyudlts/go-bagit>
-Bagging-Date: %s
-Payload-Oxum: 42.2
-`,
-			version,
-			time.Now().Round(0).Format(time.DateOnly),
-		)
+func testStaticTime(t *testing.T) {
+	t.Helper()
 
-		bagitContent = `BagIt-Version: 0.97
+	timeNow = func() time.Time {
+		return time.Date(2023, 12, 31, 12, 0, 0, 0, time.UTC)
+	}
+	t.Cleanup(func() {
+		timeNow = time.Now
+	})
+}
+
+func testStaticVersion(t *testing.T) {
+	t.Helper()
+
+	v := version
+	version = "0.2.3-test"
+	t.Cleanup(func() {
+		version = v
+	})
+}
+
+func TestCreateABag(t *testing.T) {
+	testStaticTime(t)
+	testStaticVersion(t)
+
+	baginfoContent := `Bag-Software-Agent: go-bagit (0.2.3-test) <https://github.com/nyudlts/go-bagit>
+Bagging-Date: 2023-12-31
+Payload-Oxum: 42.2
+`
+
+	bagitContent := `BagIt-Version: 0.97
 Tag-File-Character-Encoding: UTF-8
 `
-		manifestContent = `bf73d81371ea21348bfb510d8c8948bb64e0eb3cea97ec991a4170e777b6de18  data/test.txt
+	manifestContent := `bf73d81371ea21348bfb510d8c8948bb64e0eb3cea97ec991a4170e777b6de18  data/test.txt
 091e8c6b2cb96659e3c52b3b585d0885989bba9eed34d77563fe0abaf64741ea  data/test2.txt
 `
 
-		tagManifestContent = `0391a7a6394036667313e14571bf26e10b8c1d4329b82cb919a12b7936c549ae  bag-info.txt
+	tagManifestContent := `2d0f19c3c4e576bfc71e63a25d552dbcdb10bb623c6d1443a2266ee2e4455e69  bag-info.txt
 e91f941be5973ff71f1dccbdd1a32d598881893a7f21be516aca743da38b1689  bagit.txt
 ea937667fac06dad61c25afa53a134e97b0b51f6b912b8548e4b32ef2dc2b7f6  manifest-sha256.txt
 `
-	)
 
 	t.Run("Create A Bag From Existing Dir", func(t *testing.T) {
 		sourceDir := filepath.Join("test", "bag-me")

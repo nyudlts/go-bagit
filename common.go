@@ -7,9 +7,15 @@ import (
 	"time"
 )
 
-var currentTime = time.Now()
+var (
+	// timeNow sets the function that returns the current time.
+	// This defaults to time.Now. Changes to this should only be done in tests.
+	timeNow = time.Now
 
-const version = "0.2.3-alpha"
+	// version is the current application version. Changes to this should only
+	// be done for a new release or in tests.
+	version = "0.2.3-alpha"
+)
 
 func GetSoftwareAgent() string {
 	const mod = "github.com/nyudlts/go-bagit"
