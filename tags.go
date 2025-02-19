@@ -51,6 +51,10 @@ func NewTagSet(filename string, bagLocation string) (TagSet, error) {
 
 	scanner := bufio.NewScanner(tagFile)
 	for scanner.Scan() {
+		// Skip blank lines
+		if strings.TrimSpace(scanner.Text()) == "" {
+			continue
+		}
 		before, after, _ := strings.Cut(scanner.Text(), ": ")
 		tags[before] = after
 	}
