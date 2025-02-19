@@ -14,7 +14,7 @@ var (
 
 	// version is the current application version. Changes to this should only
 	// be done for a new release or in tests.
-	version = "0.2.3-alpha"
+	version = "0.3.1-alpha"
 )
 
 func GetSoftwareAgent() string {

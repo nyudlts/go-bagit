@@ -2,6 +2,7 @@ package go_bagit
 
 import (
 	"fmt"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -46,6 +47,23 @@ func TestCreateBagInfo(t *testing.T) {
 				"go-bagit (%s) <https://github.com/nyudlts/go-bagit>", version,
 			),
 			StandardTags.BaggingDate: "2024-05-15",
+		},
+	})
+}
+
+func TestParseBagInfoWithBlankLines(t *testing.T) {
+	t.Parallel()
+
+	ts, err := NewTagSet("bag-info.txt", filepath.Join(".", "test", "valid-bag-info-with-blank-lines"))
+	assert.NilError(t, err)
+	assert.DeepEqual(t, ts, TagSet{
+		Filename: "bag-info.txt",
+		Path:     "test/valid-bag-info-with-blank-lines",
+		Tags: map[string]string{
+			"Bag-Software-Agent": "bagit.py v1.8.1 <https://github.com/LibraryOfCongress/bagit-python>",
+			"Bagging-Date":       "2021-10-11",
+			"Payload-Oxum":       "20.1",
+			"nyudl-comment":      "this is a comment after some blank lines",
 		},
 	})
 }
