@@ -1,8 +1,6 @@
 module github.com/nyudlts/go-bagit
 
-go 1.21
-
-toolchain go1.22.3
+go 1.26.8
 
 require (
 	github.com/otiai10/copy v1.14.0
