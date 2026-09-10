@@ -290,7 +290,7 @@ func createManifestFile(bagLocation string, manifestFileName string, manifestLin
 		writer.WriteString(manifestLine + "\n")
 		writer.Flush()
 	}
-	if err := os.Chmod(path, fileMode); err != nil {
+	if err := os.Chmod(path, newFileMode); err != nil {
 		log.Println("- WARNING -", err.Error())
 	}
 	return nil

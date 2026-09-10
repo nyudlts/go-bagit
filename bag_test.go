@@ -385,13 +385,13 @@ Payload-Oxum: 42.2
 	bagitContent := `BagIt-Version: 0.97
 Tag-File-Character-Encoding: UTF-8
 `
-	manifestContent := `bf73d81371ea21348bfb510d8c8948bb64e0eb3cea97ec991a4170e777b6de18  data/test.txt
-091e8c6b2cb96659e3c52b3b585d0885989bba9eed34d77563fe0abaf64741ea  data/test2.txt
+	manifestContent := `091e8c6b2cb96659e3c52b3b585d0885989bba9eed34d77563fe0abaf64741ea  data/subdir/test2.txt
+bf73d81371ea21348bfb510d8c8948bb64e0eb3cea97ec991a4170e777b6de18  data/test.txt
 `
 
 	tagManifestContent := `2d0f19c3c4e576bfc71e63a25d552dbcdb10bb623c6d1443a2266ee2e4455e69  bag-info.txt
 e91f941be5973ff71f1dccbdd1a32d598881893a7f21be516aca743da38b1689  bagit.txt
-ea937667fac06dad61c25afa53a134e97b0b51f6b912b8548e4b32ef2dc2b7f6  manifest-sha256.txt
+ae07f2010f8bbf7c24479ee680259058e7fffcd1eb5078e8ea99a09e519111a9  manifest-sha256.txt
 `
 
 	t.Run("Create A Bag From Existing Dir", func(t *testing.T) {
@@ -406,16 +406,22 @@ ea937667fac06dad61c25afa53a134e97b0b51f6b912b8548e4b32ef2dc2b7f6  manifest-sha25
 			t.Error(err)
 		}
 
-		assert.Assert(t, tfs.Equal(testDir.Path(), tfs.Expected(t,
-			tfs.WithMode(0o755),
-			tfs.WithFile("bag-info.txt", baginfoContent, tfs.WithMode(fileMode)),
-			tfs.WithFile("bagit.txt", bagitContent, tfs.WithMode(fileMode)),
-			tfs.WithFile("manifest-sha256.txt", manifestContent, tfs.WithMode(fileMode)),
-			tfs.WithFile("tagmanifest-sha256.txt", tagManifestContent, tfs.WithMode(fileMode)),
-			tfs.WithDir("data", tfs.WithMode(dirMode),
-				tfs.WithFile("test.txt", "I am a test file.\n", tfs.WithMode(fileMode)),
-				tfs.WithFile("test2.txt", "I am another test file.\n", tfs.WithMode(fileMode)),
+		assert.Assert(t, tfs.Equal(
+			testDir.Path(),
+			tfs.Expected(
+				t,
+				tfs.WithMode(0o775),
+				tfs.WithFile("bag-info.txt", baginfoContent, tfs.WithMode(newFileMode)),
+				tfs.WithFile("bagit.txt", bagitContent, tfs.WithMode(newFileMode)),
+				tfs.WithFile("manifest-sha256.txt", manifestContent, tfs.WithMode(newFileMode)),
+				tfs.WithFile("tagmanifest-sha256.txt", tagManifestContent, tfs.WithMode(newFileMode)),
+				tfs.WithDir("data", tfs.WithMode(newDirMode),
+					tfs.WithDir("subdir", tfs.WithMode(0o775),
+						tfs.WithFile("test2.txt", "I am another test file.\n", tfs.WithMode(0o664)),
+					),
+					tfs.WithFile("test.txt", "I am a test file.\n", tfs.WithMode(0o664)),
+				),
 			),
-		)))
+		))
 	})
 }
